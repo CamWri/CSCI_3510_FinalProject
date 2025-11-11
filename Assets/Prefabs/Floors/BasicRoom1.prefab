@@ -157,9 +157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 2
+  roomType: 02000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 0}
+  roomExit: {fileID: 609539468571578172}
   hasSpawned: 0
 --- !u!1 &4265600992037723479
 GameObject:
@@ -397,9 +397,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 3
+  roomType: 0300000001000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 0}
+  roomExit: {fileID: 7961221494734955516}
   hasSpawned: 0
 --- !u!1 &6135735567484242539
 GameObject:
@@ -559,9 +559,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 1
+  roomType: 0300000001000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 0}
+  roomExit: {fileID: 1725995841292965950}
   hasSpawned: 0
 --- !u!1 &7038926522427555936
 GameObject:

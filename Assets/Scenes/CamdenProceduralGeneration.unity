@@ -148,13 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfeb1bf7fe5065540a450045a3edb708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
-  StartRoom: {fileID: 3619385842440502987, guid: bc28b25cd7546ba48828898b38d734fb, type: 3}
+  StartRoom: {fileID: 3619385842440502987, guid: ce3a185a5333f0e41915dd70b549e6d4, type: 3}
   roomPrefabs:
-  - {fileID: 3619385842440502987, guid: 16f224c837b80c341831ffdab920f5af, type: 3}
   - {fileID: 3619385842440502987, guid: 3e6d86a7ca8560e4f975ec2da8926751, type: 3}
+  - {fileID: 3619385842440502987, guid: 16f224c837b80c341831ffdab920f5af, type: 3}
   - {fileID: 3619385842440502987, guid: ce3a185a5333f0e41915dd70b549e6d4, type: 3}
   maxRooms: 20
-  maxAttempts: 500
+  maxAttempts: 1000
   spawnedRooms: []
   openExits: []
 --- !u!4 &1170782499

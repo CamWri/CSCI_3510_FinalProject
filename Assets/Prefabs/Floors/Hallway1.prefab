@@ -190,9 +190,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 2
+  roomType: 020000000100000003000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 0}
   hasSpawned: 0
 --- !u!1 &4265600992037723479
 GameObject:
@@ -355,6 +354,8 @@ MonoBehaviour:
   roomType: 2
   exits:
   - {fileID: 1724395942565805281}
+  generationOrder: 0
+  markForDelete: 0
 --- !u!65 &8369488998419055616
 BoxCollider:
   m_ObjectHideFlags: 0

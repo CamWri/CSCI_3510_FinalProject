@@ -4,9 +4,9 @@ using UnityEngine;
 public class RoomSpawner : MonoBehaviour
 {
     /*
-        Some Basic Optimizations That Could Be Done
-            - If CheckOverlap is true, you could remove that exitToConnect so attempts are not made again to connect it
-            - 
+        Some things to make it better
+            - Similar to rooms, I would need to check for collisions with the RoomExit inside of RoomExit.cs and if its in collision, remove that room
+                Make my own collision layer for it, adjust the existing box colliders on the RoomExits,  if it collides with anything not in the same GameObject, you can remove the Door Exit from openExits 
     */
 
     public Room StartRoom;
@@ -39,9 +39,6 @@ public class RoomSpawner : MonoBehaviour
 
             Room prefabRoomToSpawn = PickCompatibleRoom(exitToConnect);
 
-            //Debug.Log($"Exit To Connect: {exitToConnect.roomType}");
-            //Debug.Log($"Prefab Room To Spawn: {prefabRoomToSpawn.name}");
-
             if (prefabRoomToSpawn == null)
             {
                 openExits.Remove(exitToConnect);
@@ -49,16 +46,20 @@ public class RoomSpawner : MonoBehaviour
             }
 
             Room newRoom = SpawnRoomAtExit(prefabRoomToSpawn, exitToConnect);
-
             currentAttempts += 1;
-            if (newRoom == null)
+
+           if (newRoom == null)
             {
+                Debug.Log("No New Room");
+                openExits.Remove(exitToConnect);
                 continue;
             }
 
             if (CheckOverlap(newRoom))
             {
-                Destroy(newRoom.gameObject);
+                Debug.Log("Detected Overlap");
+                //Destroy(newRoom.gameObject);
+                openExits.Remove(exitToConnect);
                 continue;
             }
 
@@ -95,9 +96,13 @@ public class RoomSpawner : MonoBehaviour
 
         foreach (Room room in roomPrefabs)
         {
-            if (existingExit.roomType == room.roomType)
+            foreach (RoomType type in existingExit.roomType)
             {
-                compatibleRooms.Add(room);
+                if (room.roomType == type)
+                {
+                    compatibleRooms.Add(room);
+                    break;
+                }
             }
         }
 
@@ -124,7 +129,7 @@ public class RoomSpawner : MonoBehaviour
         BoxCollider[] colliders = newRoom.GetComponents<BoxCollider>();
 
         if (colliders == null) return false;
-        
+
         foreach (var col in colliders)
         {
             Collider[] overlaps = Physics.OverlapBox(col.bounds.center, col.bounds.size / 2, col.transform.rotation, LayerMask.GetMask("GeneratedRoom"));

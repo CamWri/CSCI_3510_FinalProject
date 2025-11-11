@@ -157,9 +157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 3
-  parentRoom: {fileID: 0}
-  roomExit: {fileID: 0}
+  roomType: 0100000002000000
+  parentRoom: {fileID: 3619385842440502987}
+  roomExit: {fileID: 8003390180879204925}
   hasSpawned: 0
 --- !u!1 &3577841742260743652
 GameObject:
@@ -286,9 +286,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 3
-  parentRoom: {fileID: 0}
-  roomExit: {fileID: 0}
+  roomType: 020000000100000003000000
+  parentRoom: {fileID: 3619385842440502987}
+  roomExit: {fileID: 609539468571578172}
   hasSpawned: 0
 --- !u!1 &3763199843577991007
 GameObject:
@@ -415,9 +415,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
   exitType: 0
-  roomType: 3
-  parentRoom: {fileID: 0}
-  roomExit: {fileID: 0}
+  roomType: 0100000002000000
+  parentRoom: {fileID: 3619385842440502987}
+  roomExit: {fileID: 438500965111467365}
   hasSpawned: 0
 --- !u!1 &4265600992037723479
 GameObject:
@@ -611,7 +611,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
   roomType: 0
-  exits: []
+  exits:
+  - {fileID: 4837952191489983109}
+  - {fileID: 9212055598873688629}
+  - {fileID: 1724395942565805281}
   generationOrder: 0
   markForDelete: 0
 --- !u!65 &3096768992356210665
