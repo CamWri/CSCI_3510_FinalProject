@@ -62,7 +62,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.5, y: 0.25, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8613565245855283646}
@@ -159,7 +159,6 @@ MonoBehaviour:
   exitType: 0
   roomType: 02000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 609539468571578172}
   hasSpawned: 0
 --- !u!1 &4265600992037723479
 GameObject:
@@ -302,7 +301,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 2.5}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.5, y: 0.25, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8613565245855283646}
@@ -399,7 +398,6 @@ MonoBehaviour:
   exitType: 0
   roomType: 0300000001000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 7961221494734955516}
   hasSpawned: 0
 --- !u!1 &6135735567484242539
 GameObject:
@@ -561,7 +559,6 @@ MonoBehaviour:
   exitType: 0
   roomType: 0300000001000000
   parentRoom: {fileID: 3619385842440502987}
-  roomExit: {fileID: 1725995841292965950}
   hasSpawned: 0
 --- !u!1 &7038926522427555936
 GameObject:
@@ -577,7 +574,7 @@ GameObject:
   - component: {fileID: 4948394369842264033}
   m_Layer: 10
   m_Name: BasicRoom1
-  m_TagString: Untagged
+  m_TagString: GeneratedRoom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

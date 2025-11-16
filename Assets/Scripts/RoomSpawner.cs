@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
+using System.Collections;
 
 public class RoomSpawner : MonoBehaviour
 {
@@ -8,6 +11,10 @@ public class RoomSpawner : MonoBehaviour
             - Similar to rooms, I would need to check for collisions with the RoomExit inside of RoomExit.cs and if its in collision, remove that room
                 Make my own collision layer for it, adjust the existing box colliders on the RoomExits,  if it collides with anything not in the same GameObject, you can remove the Door Exit from openExits 
     */
+
+    public GameObject player;
+    public GameObject door;
+
 
     public Room StartRoom;
     public List<Room> roomPrefabs;
@@ -20,11 +27,24 @@ public class RoomSpawner : MonoBehaviour
     public List<Room> spawnedRooms = new();
     public List<RoomExit> openExits = new();
 
+    public NavMeshSurface globalNavMeshSurface;
 
     private void Start()
     {
-        Generate();
+        GenerateNewLevel();
     }
+
+    public void GenerateNewLevel()
+    {
+        Generate();
+        StartCoroutine(BuildNavMesh());
+    }
+
+    private IEnumerator BuildNavMesh()
+    {
+        yield return new WaitForEndOfFrame();
+        globalNavMeshSurface.BuildNavMesh();
+    } 
 
     public void Generate()
     {
@@ -48,9 +68,8 @@ public class RoomSpawner : MonoBehaviour
             Room newRoom = SpawnRoomAtExit(prefabRoomToSpawn, exitToConnect);
             currentAttempts += 1;
 
-           if (newRoom == null)
+            if (newRoom == null)
             {
-                Debug.Log("No New Room");
                 openExits.Remove(exitToConnect);
                 continue;
             }
@@ -58,7 +77,7 @@ public class RoomSpawner : MonoBehaviour
             if (CheckOverlap(newRoom))
             {
                 Debug.Log("Detected Overlap");
-                //Destroy(newRoom.gameObject);
+                Destroy(newRoom.gameObject);
                 openExits.Remove(exitToConnect);
                 continue;
             }
@@ -125,20 +144,16 @@ public class RoomSpawner : MonoBehaviour
 
     private bool CheckOverlap(Room newRoom)
     {
-
-        BoxCollider[] colliders = newRoom.GetComponents<BoxCollider>();
-
-        if (colliders == null) return false;
+        BoxCollider[] colliders = newRoom.GetComponentsInChildren<BoxCollider>();
 
         foreach (var col in colliders)
         {
-            Collider[] overlaps = Physics.OverlapBox(col.bounds.center, col.bounds.size / 2, col.transform.rotation, LayerMask.GetMask("GeneratedRoom"));
+            Collider[] overlaps = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("GeneratedRoom"));
             foreach (var hit in overlaps)
             {
                 Room otherRoom = hit.GetComponentInParent<Room>();
                 if (otherRoom != null && otherRoom != newRoom)
                 {
-                    // Only delete the newer room
                     if (newRoom.generationOrder > otherRoom.generationOrder)
                         return true;
                 }
@@ -146,5 +161,36 @@ public class RoomSpawner : MonoBehaviour
         }
 
         return false;
+    }
+
+
+    public void ConnectExits(RoomExit existingExit, Room newRoom)
+    {
+        if (existingExit == null || newRoom == null)
+            return;
+
+        // Get the NavMeshLink on the existing exit
+        NavMeshLink link = existingExit.GetComponent<NavMeshLink>();
+        if (link == null)
+            return;
+
+        // The “end” of the link is the new room's entrance (0,0)
+        Vector3 entranceWorldPos = newRoom.transform.position;
+
+        // Compute midpoint
+        Vector3 midpoint = (existingExit.transform.position + entranceWorldPos) * 0.5f;
+        link.transform.position = midpoint;
+
+        // Align link along direction
+        Vector3 dir = entranceWorldPos - existingExit.transform.position;
+        link.transform.rotation = Quaternion.LookRotation(dir);
+
+        // Set width using the doorway collider
+        BoxCollider doorCollider = existingExit.GetComponent<BoxCollider>();
+        if (doorCollider != null)
+            link.width = doorCollider.size.x; // Or size.z depending on your axis
+
+        // Enable the link
+        link.enabled = true;
     }
 }
