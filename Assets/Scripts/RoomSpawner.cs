@@ -10,6 +10,8 @@ public class RoomSpawner : MonoBehaviour
         Some things to make it better
             - Similar to rooms, I would need to check for collisions with the RoomExit inside of RoomExit.cs and if its in collision, remove that room
                 Make my own collision layer for it, adjust the existing box colliders on the RoomExits,  if it collides with anything not in the same GameObject, you can remove the Door Exit from openExits 
+
+        For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
     */
 
     public GameObject player;
