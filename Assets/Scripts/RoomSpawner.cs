@@ -7,16 +7,11 @@ using System.Collections;
 public class RoomSpawner : MonoBehaviour
 {
     /*
-        Some things to make it better
-            - Similar to rooms, I would need to check for collisions with the RoomExit inside of RoomExit.cs and if its in collision, remove that room
-                Make my own collision layer for it, adjust the existing box colliders on the RoomExits,  if it collides with anything not in the same GameObject, you can remove the Door Exit from openExits 
-
-        For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
+        Future Notes:
+            - For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
     */
 
     public GameObject player;
-    public GameObject door;
-
 
     public Room StartRoom;
     public List<Room> roomPrefabs;
@@ -24,12 +19,18 @@ public class RoomSpawner : MonoBehaviour
     public int maxAttempts = 5;
     private int currentAttempts = 0;
 
-
     private int spawnedRoomsCount;
     public List<Room> spawnedRooms = new();
     public List<RoomExit> openExits = new();
+    public List<EnemySpawnPoints> allEnemySpawnPoints = new();
 
     public NavMeshSurface globalNavMeshSurface;
+
+    private DoorDatabase db;
+
+    private void Awake() {
+        db = Resources.Load<DoorDatabase>("DoorDatabase");
+    }
 
     private void Start()
     {
@@ -40,6 +41,10 @@ public class RoomSpawner : MonoBehaviour
     {
         Generate();
         StartCoroutine(BuildNavMesh());
+        foreach (RoomExit exit in openExits)
+        {
+            exit.CloseExit();
+        }
     }
 
     private IEnumerator BuildNavMesh()
@@ -72,15 +77,12 @@ public class RoomSpawner : MonoBehaviour
 
             if (newRoom == null)
             {
-                openExits.Remove(exitToConnect);
                 continue;
             }
 
             if (CheckOverlap(newRoom))
             {
-                Debug.Log("Detected Overlap");
                 Destroy(newRoom.gameObject);
-                openExits.Remove(exitToConnect);
                 continue;
             }
 
@@ -163,36 +165,5 @@ public class RoomSpawner : MonoBehaviour
         }
 
         return false;
-    }
-
-
-    public void ConnectExits(RoomExit existingExit, Room newRoom)
-    {
-        if (existingExit == null || newRoom == null)
-            return;
-
-        // Get the NavMeshLink on the existing exit
-        NavMeshLink link = existingExit.GetComponent<NavMeshLink>();
-        if (link == null)
-            return;
-
-        // The “end” of the link is the new room's entrance (0,0)
-        Vector3 entranceWorldPos = newRoom.transform.position;
-
-        // Compute midpoint
-        Vector3 midpoint = (existingExit.transform.position + entranceWorldPos) * 0.5f;
-        link.transform.position = midpoint;
-
-        // Align link along direction
-        Vector3 dir = entranceWorldPos - existingExit.transform.position;
-        link.transform.rotation = Quaternion.LookRotation(dir);
-
-        // Set width using the doorway collider
-        BoxCollider doorCollider = existingExit.GetComponent<BoxCollider>();
-        if (doorCollider != null)
-            link.width = doorCollider.size.x; // Or size.z depending on your axis
-
-        // Enable the link
-        link.enabled = true;
     }
 }

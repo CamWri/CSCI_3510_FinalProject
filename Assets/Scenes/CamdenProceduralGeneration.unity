@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &951256810
+--- !u!1001 &110939910
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -133,11 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -174,43 +174,58 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 953713836}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
---- !u!1 &953713829 stripped
+--- !u!1 &192544728
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
-  m_PrefabInstance: {fileID: 951256810}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &953713836
-Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953713829}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 192544730}
+  - component: {fileID: 192544729}
+  m_Layer: 0
+  m_Name: RoundSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &192544729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192544728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a568d41ec875eb4ea7ae41eff9c7591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieRoundManager
+  roomSpawner: {fileID: 1170782498}
+  zombiePrefab: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
+  startingZombies: 5
+  spawnInterval: 1
+  round: 1
+  roundDelay: 5
+--- !u!4 &192544730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192544728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1170782497
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +257,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
   player: {fileID: 0}
-  door: {fileID: 0}
   StartRoom: {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   roomPrefabs:
   - {fileID: 3619385842440502987, guid: 3e6d86a7ca8560e4f975ec2da8926751, type: 3}
@@ -252,6 +266,7 @@ MonoBehaviour:
   maxAttempts: 500
   spawnedRooms: []
   openExits: []
+  allEnemySpawnPoints: []
   globalNavMeshSurface: {fileID: 1170782500}
 --- !u!4 &1170782499
 Transform:
@@ -513,4 +528,5 @@ SceneRoots:
   - {fileID: 1246228341}
   - {fileID: 1550735305}
   - {fileID: 1170782499}
-  - {fileID: 951256810}
+  - {fileID: 110939910}
+  - {fileID: 192544730}

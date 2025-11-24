@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ZombieRoundManager : MonoBehaviour
 {
+    public RoomSpawner roomSpawner;
+
     [Header("Spawning Settings")]
-    public List<Transform> spawnPoints;
     public GameObject zombiePrefab;
+
 
     [Header("Round Settings")]
     public int startingZombies = 5;
@@ -37,7 +39,8 @@ public class ZombieRoundManager : MonoBehaviour
     {
         while (zombiesRemaining > 0)
         {
-            Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Count)];
+            //Get the list from 
+            Transform spawn = roomSpawner.allEnemySpawnPoints[Random.Range(0, roomSpawner.allEnemySpawnPoints.Count)].transform;
             Instantiate(zombiePrefab, spawn.position, spawn.rotation);
             zombiesRemaining--;
 
