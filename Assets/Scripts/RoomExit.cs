@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class RoomExit : MonoBehaviour
 {
-    public RoomExitType exitType = RoomExitType.WoodenRoundDoor;
-
     public RoomType[] roomType;
 
     public Room parentRoom;

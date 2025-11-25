@@ -133,11 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.58
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.36
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -260,8 +260,14 @@ MonoBehaviour:
   StartRoom: {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   roomPrefabs:
   - {fileID: 3619385842440502987, guid: 3e6d86a7ca8560e4f975ec2da8926751, type: 3}
+  - {fileID: 3619385842440502987, guid: 2b37688f2184b7542a0813a15ddb0247, type: 3}
+  - {fileID: 3619385842440502987, guid: 236174bc635862048a0505de770da122, type: 3}
   - {fileID: 3619385842440502987, guid: 16f224c837b80c341831ffdab920f5af, type: 3}
+  - {fileID: 3619385842440502987, guid: 72db0d17953cfc8419baced83ffc5fbe, type: 3}
   - {fileID: 3619385842440502987, guid: ce3a185a5333f0e41915dd70b549e6d4, type: 3}
+  - {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
+  - {fileID: 3619385842440502987, guid: c8af26974f6dcb543913a0777c16abd7, type: 3}
+  - {fileID: 3619385842440502987, guid: 4ecda5da3e6fc1e4d9ca15b5d62d326f, type: 3}
   maxRooms: 25
   maxAttempts: 500
   spawnedRooms: []

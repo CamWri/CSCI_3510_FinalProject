@@ -51,7 +51,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278172059207348894}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -152,8 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
-  roomType: 03000000
+  roomType: 0100000002000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 8649926714341161060}
 --- !u!1 &1468207820681448426
@@ -261,7 +260,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3061259382597645367}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -362,8 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
-  roomType: 0100000002000000
+  roomType: 010000000200000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 2215796992075410850}
 --- !u!1 &3250484758169962530
@@ -417,7 +415,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3250484758169962530}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -518,8 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
-  roomType: 03000000
+  roomType: 0200000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 1528624733734057320}
 --- !u!1 &5063222836123341011
@@ -573,7 +570,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5063222836123341011}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -674,8 +671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
-  roomType: 02000000
+  roomType: 0200000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 6366629854074291233}
 --- !u!1 &5605952939409383961
@@ -729,7 +725,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5605952939409383961}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -830,8 +826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
-  roomType: 0100000002000000
+  roomType: 030000000200000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 3519345511594955814}
 --- !u!1 &5968161735539877353
@@ -917,7 +912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d541cc03ae4cf4293c1771eb10866c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomType: 3
+  roomType: 4
   exits:
   - {fileID: 4837952191489983109}
   - {fileID: 6687048713988142493}
@@ -1010,7 +1005,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 4.5, y: 5, z: 4}
-  m_Center: {x: 2.5, y: 2.5, z: -5}
+  m_Center: {x: 7.6, y: 2.5, z: 5}
 --- !u!54 &725803670889569014
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1384,11 +1379,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.048
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.334
+      value: 7.409
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1763,7 +1758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.277
+      value: 2.346
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1986,7 +1981,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.373
+      value: 7.351
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2579,7 +2574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.373
+      value: 7.299
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2336cdcbcfff9ee4d9865ba46e29914d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2744,7 +2739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.431
+      value: -7.454
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalRotation.w

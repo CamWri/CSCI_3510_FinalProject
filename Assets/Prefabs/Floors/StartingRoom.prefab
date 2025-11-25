@@ -59,7 +59,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &609539468571578172
 Transform:
   m_ObjectHideFlags: 0
@@ -191,8 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
-  roomType: 0100000002000000
+  roomType: 0300000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 4312096193956591277}
 --- !u!1 &3851147799642313730
@@ -325,7 +324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7961221494734955516
 Transform:
   m_ObjectHideFlags: 0
@@ -457,7 +456,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
   roomType: 0100000002000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 5667703908723824590}
@@ -624,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1725995841292965950
 Transform:
   m_ObjectHideFlags: 0
@@ -756,7 +754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
   roomType: 0100000002000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 8364541697275939604}

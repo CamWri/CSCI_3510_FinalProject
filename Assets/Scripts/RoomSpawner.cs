@@ -26,12 +26,6 @@ public class RoomSpawner : MonoBehaviour
 
     public NavMeshSurface globalNavMeshSurface;
 
-    private DoorDatabase db;
-
-    private void Awake() {
-        db = Resources.Load<DoorDatabase>("DoorDatabase");
-    }
-
     private void Start()
     {
         GenerateNewLevel();

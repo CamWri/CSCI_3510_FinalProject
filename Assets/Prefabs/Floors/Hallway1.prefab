@@ -120,7 +120,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3577841742260743652}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -221,7 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
   roomType: 020000000100000003000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 3110951482360806910}
@@ -297,7 +296,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.5, y: 5, z: 1}
+  m_Size: {x: 4.5, y: 5, z: 1.5}
   m_Center: {x: 2.5, y: 2.5, z: 0}
 --- !u!54 &3535674335597208684
 Rigidbody:
@@ -412,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253688300, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_Name
-      value: Door_Wooden_Round_Left (1)
+      value: Door_Exit1
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253688300, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_IsActive

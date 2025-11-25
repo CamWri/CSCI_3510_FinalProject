@@ -51,7 +51,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278172059207348894}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -152,8 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
-  roomType: 03000000
+  roomType: 04000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 8649926714341161060}
 --- !u!1 &1468207820681448426
@@ -257,7 +256,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3061259382597645367}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -358,8 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
-  roomType: 0100000002000000
+  roomType: 010000000200000004000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 2215796992075410850}
 --- !u!1 &3250484758169962530
@@ -413,7 +411,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3250484758169962530}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -514,7 +512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
   roomType: 03000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 1528624733734057320}
@@ -569,7 +566,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5063222836123341011}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -670,7 +667,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 0
   roomType: 02000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 6366629854074291233}
@@ -725,7 +721,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5605952939409383961}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -826,7 +822,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6addfa34139a184e93c69f7727d5bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomExit
-  exitType: 1
   roomType: 0100000002000000
   parentRoom: {fileID: 3619385842440502987}
   doorInstance: {fileID: 3519345511594955814}
@@ -876,7 +871,6 @@ GameObject:
   - component: {fileID: 3096768992356210665}
   - component: {fileID: 4158578937118589543}
   - component: {fileID: 8329431599946109844}
-  - component: {fileID: 94090586092507208}
   - component: {fileID: 725803670889569014}
   m_Layer: 10
   m_Name: LRoom1
@@ -913,7 +907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d541cc03ae4cf4293c1771eb10866c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
-  roomType: 3
+  roomType: 4
   exits:
   - {fileID: 4837952191489983109}
   - {fileID: 6687048713988142493}
@@ -986,27 +980,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.5, y: 5, z: 4}
   m_Center: {x: 7.5, y: 2.5, z: -5}
---- !u!65 &94090586092507208
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7038926522427555936}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 4.5, y: 5, z: 4}
-  m_Center: {x: 2.5, y: 2.5, z: -5}
 --- !u!54 &725803670889569014
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1689,7 +1662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.277
+      value: 2.348
       objectReference: {fileID: 0}
     - target: {fileID: 2642311626253648332, guid: ba93fc15ee14dbf45b36696cb946115f, type: 3}
       propertyPath: m_LocalRotation.w
