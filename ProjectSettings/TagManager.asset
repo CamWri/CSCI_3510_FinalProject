@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 3
   tags:
   - GeneratedRoom
-  - Zombie
   layers:
   - Default
   - TransparentFX
@@ -18,8 +17,8 @@ TagManager:
   - Wall
   - 
   - GeneratedRoom
-  - RoomExit
   - 
+  - WeaponLayer
   - 
   - 
   - 
