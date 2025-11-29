@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - GeneratedRoom
+  - TestZombie
   layers:
   - Default
   - TransparentFX
