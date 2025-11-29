@@ -11,8 +11,13 @@ public class RoomSpawner : MonoBehaviour
             - For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
     */
 
+    [Header("Zombie Spawning")]
+    public ZombieRoundManager zombieRoundManager;
+    
+    [Header("Player")]
     public GameObject player;
 
+    [Header("Room Generation Logic")]
     public Room StartRoom;
     public List<Room> roomPrefabs;
     public int maxRooms = 10;
@@ -25,6 +30,11 @@ public class RoomSpawner : MonoBehaviour
     public List<EnemySpawnPoints> allEnemySpawnPoints = new();
 
     public NavMeshSurface globalNavMeshSurface;
+
+    private void Awake()
+    {
+        zombieRoundManager = FindFirstObjectByType<ZombieRoundManager>();
+    }
 
     private void Start()
     {
@@ -39,6 +49,7 @@ public class RoomSpawner : MonoBehaviour
         {
             exit.CloseExit();
         }
+        zombieRoundManager.startEnemySpawning(allEnemySpawnPoints);
     }
 
     private IEnumerator BuildNavMesh()
@@ -86,6 +97,11 @@ public class RoomSpawner : MonoBehaviour
             foreach (RoomExit newExit in newRoom.GetExits())
             {
                 openExits.Add(newExit);
+            }
+
+            foreach (EnemySpawnPoints enemySpawn in newRoom.GetEnemySpawnPoints())
+            {
+                allEnemySpawnPoints.Add(enemySpawn);
             }
 
             openExits.Remove(exitToConnect);

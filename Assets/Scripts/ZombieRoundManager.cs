@@ -4,45 +4,51 @@ using UnityEngine;
 
 public class ZombieRoundManager : MonoBehaviour
 {
-    public RoomSpawner roomSpawner;
-
     [Header("Spawning Settings")]
     public GameObject zombiePrefab;
 
-
     [Header("Round Settings")]
     public int startingZombies = 5;
-    public float spawnInterval = 1f; // seconds between zombies
+    public float spawnInterval = 1f;
     public int round = 1;
     public float roundDelay = 5f;
 
-    private int zombiesRemaining;
+    private int zombiesToSpawn;   // how many still need to be spawned
+    private int zombiesAlive;     // how many are alive in the scene
     private bool roundActive;
 
-    void Start()
+    private List<EnemySpawnPoints> allEnemySpawnPoints;
+
+    public void startEnemySpawning(List<EnemySpawnPoints> enemySpawnPositionList)
     {
+        allEnemySpawnPoints = enemySpawnPositionList;
         StartCoroutine(StartNextRound());
     }
 
     IEnumerator StartNextRound()
     {
         yield return new WaitForSeconds(roundDelay);
+
         roundActive = true;
 
-        // Determine zombies to spawn based on round
-        zombiesRemaining = startingZombies + (round - 1) * 2;
+        // HOW MANY WILL SPAWN THIS ROUND
+        zombiesToSpawn = startingZombies + (round - 1) * 2;
+        // RESET alive count
+        zombiesAlive = 0;
 
         StartCoroutine(SpawnZombies());
     }
 
     IEnumerator SpawnZombies()
     {
-        while (zombiesRemaining > 0)
+        while (zombiesToSpawn > 0)
         {
-            //Get the list from 
-            Transform spawn = roomSpawner.allEnemySpawnPoints[Random.Range(0, roomSpawner.allEnemySpawnPoints.Count)].transform;
+            Transform spawn = allEnemySpawnPoints[Random.Range(0, allEnemySpawnPoints.Count)].transform;
+
             Instantiate(zombiePrefab, spawn.position, spawn.rotation);
-            zombiesRemaining--;
+
+            zombiesToSpawn--;
+            zombiesAlive++;   // track alive zombies
 
             yield return new WaitForSeconds(spawnInterval);
         }
@@ -50,11 +56,17 @@ public class ZombieRoundManager : MonoBehaviour
 
     public void OnZombieKilled()
     {
-        zombiesRemaining--;
-        if (zombiesRemaining <= 0 && roundActive)
+        zombiesAlive--;
+
+        Debug.Log($"Zombie killed. Alive: {zombiesAlive}");
+
+        // When all zombies that were spawned are dead → new round
+        if (zombiesAlive <= 0 && roundActive)
         {
             roundActive = false;
             round++;
+
+            Debug.Log($"Starting round {round}");
             StartCoroutine(StartNextRound());
         }
     }
