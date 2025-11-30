@@ -12,8 +12,10 @@ public class DebugSkeletonKiller : MonoBehaviour
                 Debug.Log("No skeletons found!");
                 return;
             }
-            
-            skeletons[0].GetComponent<Skeleton>().TakeDamage(100);
+
+            // Pick a random skeleton
+            int randomIndex = Random.Range(0, skeletons.Length);
+            skeletons[randomIndex].GetComponent<Skeleton>().TakeDamage(100);
         }
     }
 }
