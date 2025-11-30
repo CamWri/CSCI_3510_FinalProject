@@ -340,7 +340,8 @@ MonoBehaviour:
   range: 60
   fireRate: 1
   damage: 60
-  ammo: 10
+  ammo: 30
+  reloadTime: 1.5
   muzzleFlash: {fileID: 0}
 --- !u!1 &486082376 stripped
 GameObject:
@@ -469,7 +470,8 @@ MonoBehaviour:
   range: 50
   fireRate: 0.75
   damage: 15
-  ammo: 12
+  ammo: 30
+  reloadTime: 1
   muzzleFlash: {fileID: 0}
 --- !u!1 &730697993 stripped
 GameObject:
@@ -694,6 +696,7 @@ MonoBehaviour:
   fireRate: 0.5
   damage: 30
   ammo: 30
+  reloadTime: 1.2
   muzzleFlash: {fileID: 0}
 --- !u!1 &1183429489
 GameObject:
@@ -951,7 +954,8 @@ MonoBehaviour:
   range: 75
   fireRate: 0.3
   damage: 20
-  ammo: 25
+  ammo: 30
+  reloadTime: 0.75
   muzzleFlash: {fileID: 0}
 --- !u!1 &1630714286
 GameObject:
