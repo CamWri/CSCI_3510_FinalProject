@@ -12,7 +12,7 @@ public class RoomSpawner : MonoBehaviour
     */
 
     [Header("Zombie Spawning")]
-    public ZombieRoundManager zombieRoundManager;
+    public SkeletonRoundManager skeletonRoundManager;
     
     [Header("Player")]
     public GameObject player;
@@ -33,7 +33,7 @@ public class RoomSpawner : MonoBehaviour
 
     private void Awake()
     {
-        zombieRoundManager = FindFirstObjectByType<ZombieRoundManager>();
+        skeletonRoundManager = FindFirstObjectByType<SkeletonRoundManager>();
     }
 
     private void Start()
@@ -49,7 +49,7 @@ public class RoomSpawner : MonoBehaviour
         {
             exit.CloseExit();
         }
-        zombieRoundManager.startEnemySpawning(allEnemySpawnPoints);
+        skeletonRoundManager.startEnemySpawning(allEnemySpawnPoints);
     }
 
     private IEnumerator BuildNavMesh()

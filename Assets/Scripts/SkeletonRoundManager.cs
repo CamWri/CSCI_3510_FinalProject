@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieRoundManager : MonoBehaviour
+public class SkeletonRoundManager : MonoBehaviour
 {
     [Header("Spawning Settings")]
     public GameObject zombiePrefab;
@@ -36,10 +36,10 @@ public class ZombieRoundManager : MonoBehaviour
         // RESET alive count
         zombiesAlive = 0;
 
-        StartCoroutine(SpawnZombies());
+        StartCoroutine(SpawnSkeletons());
     }
 
-    IEnumerator SpawnZombies()
+    IEnumerator SpawnSkeletons()
     {
         while (zombiesToSpawn > 0)
         {
@@ -54,7 +54,7 @@ public class ZombieRoundManager : MonoBehaviour
         }
     }
 
-    public void OnZombieKilled()
+    public void OnSkeletonKilled()
     {
         zombiesAlive--;
 

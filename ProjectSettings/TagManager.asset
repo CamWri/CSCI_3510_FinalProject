@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - GeneratedRoom
+  - Skeleton
   layers:
   - Default
   - TransparentFX
