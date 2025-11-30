@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using System.Linq;
 
 public class Skeleton : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class Skeleton : MonoBehaviour
 
     [Header("Settings")]
     public float walkSpeed = 3.5f;
-    public float speedRandomness = 0.5f; // +/- variation
+    public float speedRandomness = 0.5f;
     public float attackRange = 2f;
     public float spawnDuration = 2f;
     public float deathDuration = 1f;
@@ -22,9 +24,13 @@ public class Skeleton : MonoBehaviour
 
     bool isSpawning = true;
     bool isDead = false;
+    bool isAttacking = false;
+
+    float attackAnimationLength;
 
     void Start()
     {
+        // Ensure player reference
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -34,8 +40,15 @@ public class Skeleton : MonoBehaviour
                 Debug.LogError("No GameObject with tag 'Player' found!");
         }
 
+        // Cache round manager
         roundManager = FindFirstObjectByType<SkeletonRoundManager>();
 
+        // Cache attack animation length dynamically
+        attackAnimationLength = anim.runtimeAnimatorController.animationClips
+            .First(c => c.name == "root|slash01") // <-- Make sure this is the exact clip name!
+            .length;
+
+        // Spawn animation setup
         agent.speed = 0f;
         anim.SetBool("isSpawning", true);
 
@@ -47,7 +60,6 @@ public class Skeleton : MonoBehaviour
         isSpawning = false;
         anim.SetBool("isSpawning", false);
 
-        // Randomize walk speed slightly
         float randomOffset = Random.Range(-speedRandomness, speedRandomness);
         agent.speed = walkSpeed + randomOffset;
     }
@@ -60,16 +72,52 @@ public class Skeleton : MonoBehaviour
 
         if (distance > attackRange)
         {
-            agent.SetDestination(player.position);
-            anim.SetBool("isAttacking", false);
-            anim.SetFloat("speed", agent.velocity.magnitude / agent.speed);
+            MoveTowardPlayer();
         }
         else
         {
-            agent.SetDestination(transform.position);
-            anim.SetBool("isAttacking", true);
-            anim.SetFloat("speed", 0f);
+            TryAttack();
         }
+    }
+
+    void MoveTowardPlayer()
+    {
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
+        anim.SetFloat("speed", agent.speed);
+    }
+
+    void TryAttack()
+    {
+        // Stop agent movement COMPLETELY
+        agent.isStopped = true;
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+
+        anim.SetFloat("speed", 0f);
+
+        if (!isAttacking)
+        {
+            anim.SetTrigger("attackTrigger");
+            StartCoroutine(AttackRoutine());
+        }
+    }
+
+    IEnumerator AttackRoutine()
+    {
+        isAttacking = true;
+
+        yield return new WaitForSeconds(attackAnimationLength);
+
+        // Sync agent's internal position to the model
+        agent.nextPosition = transform.position;
+
+        // Re-enable movement
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+        agent.isStopped = false;
+
+        isAttacking = false;
     }
 
     public void TakeDamage(float amount)
@@ -88,6 +136,7 @@ public class Skeleton : MonoBehaviour
         isDead = true;
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
+
         anim.SetBool("isDead", true);
 
         if (roundManager != null)

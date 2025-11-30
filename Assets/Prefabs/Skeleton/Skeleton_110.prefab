@@ -191,7 +191,7 @@ MonoBehaviour:
   anim: {fileID: 5217009034759064855}
   agent: {fileID: 4221154758205669590}
   walkSpeed: 3.5
-  speedRandomness: 1.5
+  speedRandomness: 0.5
   attackRange: 2
   spawnDuration: 2
   deathDuration: 3

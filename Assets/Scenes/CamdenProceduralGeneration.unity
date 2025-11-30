@@ -403,7 +403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1246228339
 AudioListener:
   m_ObjectHideFlags: 0
@@ -507,20 +507,24 @@ PrefabInstance:
       value: NavMeshAgent
       objectReference: {fileID: 0}
     - target: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.99104
+      value: 6.23
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.2163
+      value: 2.76
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10.40786
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8336855214005110547, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_LocalRotation.w
