@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 483098872977230277, guid: 463fdc8764472c140af8ade8f791b6de, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4781679570761396682, guid: 463fdc8764472c140af8ade8f791b6de, type: 3}
       propertyPath: orientation
@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4554427671739438083, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -306,7 +306,8 @@ MonoBehaviour:
   maxRooms: 25
   maxAttempts: 500
   spawnedRooms: []
-  openExits: []
+  unusedExits: []
+  exitsUsed: []
   allEnemySpawnPoints: []
   globalNavMeshSurface: {fileID: 1170782500}
 --- !u!4 &1170782499
@@ -403,7 +404,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1246228339
 AudioListener:
   m_ObjectHideFlags: 0
@@ -508,7 +509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5681790224541697337, guid: 14ad7db48c38ff448b7c37b4e58d475e, type: 3}
       propertyPath: m_TagString
