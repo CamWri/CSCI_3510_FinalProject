@@ -6,6 +6,8 @@ TagManager:
   tags:
   - GeneratedRoom
   - Skeleton
+  - Zombie
+  - Exit
   layers:
   - Default
   - TransparentFX
