@@ -16,6 +16,7 @@ public class Gun : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip fireSound;
+    public AudioClip reloadSound;
 
     private Camera fpsCamera;
     private float nextTimeToFire;
@@ -71,7 +72,7 @@ public class Gun : MonoBehaviour
         }
         if (audioSource != null && fireSound != null)
         {
-            audioSource.PlayOneShot(fireSound);
+            audioSource.PlayOneShot(fireSound, 0.7f);
         }
 
         currentAmmo -= 1;
@@ -95,6 +96,7 @@ public class Gun : MonoBehaviour
     {
         reloading = true;
         reloadStartTime = Time.time;
+        audioSource.PlayOneShot(reloadSound, 0.7f);
         //reload movement
         // Reload sound
 

@@ -348,6 +348,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 267405334}
   fireSound: {fileID: 8300000, guid: a155cdb3066103446bb0bc7ab1953ced, type: 3}
+  reloadSound: {fileID: 8300000, guid: 5c5e39cc943cab2499920cf2865f7355, type: 3}
 --- !u!82 &267405334
 AudioSource:
   m_ObjectHideFlags: 0
@@ -577,6 +578,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 619612924}
   fireSound: {fileID: 8300000, guid: aebd34a0ab95eef43bbe4adc7c530a2f, type: 3}
+  reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
 --- !u!82 &619612924
 AudioSource:
   m_ObjectHideFlags: 0
@@ -904,6 +906,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 1051324365}
   fireSound: {fileID: 8300000, guid: 223baf287c084e44a81ef743eaf87532, type: 3}
+  reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
 --- !u!82 &1051324365
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1265,6 +1268,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 1518894709}
   fireSound: {fileID: 8300000, guid: 2654f33d811a3b243957877b8bdb63c4, type: 3}
+  reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
 --- !u!82 &1518894709
 AudioSource:
   m_ObjectHideFlags: 0
