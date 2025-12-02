@@ -192,7 +192,7 @@ MonoBehaviour:
   agent: {fileID: 4221154758205669590}
   walkSpeed: 3.5
   speedRandomness: 0.5
-  attackRange: 2
+  attackRange: 2.5
   spawnDuration: 2
   deathDuration: 3
   health: 100
