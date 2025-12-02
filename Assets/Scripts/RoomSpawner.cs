@@ -12,7 +12,7 @@ public class RoomSpawner : MonoBehaviour
     */
 
     [Header("Zombie Spawning")]
-    public ZombieRoundManager zombieRoundManager;
+    public SkeletonRoundManager skeletonRoundManager;
     
     [Header("Player")]
     public GameObject player;
@@ -26,14 +26,17 @@ public class RoomSpawner : MonoBehaviour
 
     private int spawnedRoomsCount;
     public List<Room> spawnedRooms = new();
-    public List<RoomExit> openExits = new();
+    public List<RoomExit> unusedExits = new();
+    public List<RoomExit> exitsUsed = new();
+
+
     public List<EnemySpawnPoints> allEnemySpawnPoints = new();
 
     public NavMeshSurface globalNavMeshSurface;
 
     private void Awake()
     {
-        zombieRoundManager = FindFirstObjectByType<ZombieRoundManager>();
+        skeletonRoundManager = FindFirstObjectByType<SkeletonRoundManager>();
     }
 
     private void Start()
@@ -45,11 +48,17 @@ public class RoomSpawner : MonoBehaviour
     {
         Generate();
         StartCoroutine(BuildNavMesh());
-        foreach (RoomExit exit in openExits)
+        foreach (RoomExit exit in unusedExits)
         {
             exit.CloseExit();
         }
-        zombieRoundManager.startEnemySpawning(allEnemySpawnPoints);
+
+        foreach (RoomExit exit in exitsUsed)
+        {
+            exit.CloseExit();
+        }
+
+        skeletonRoundManager.startEnemySpawning(allEnemySpawnPoints);
     }
 
     private IEnumerator BuildNavMesh()
@@ -62,10 +71,10 @@ public class RoomSpawner : MonoBehaviour
     {
         Room startRoom = InstantiateRoom(StartRoom, Vector3.zero, Quaternion.identity);
         spawnedRooms.Add(startRoom);
-        openExits.AddRange(startRoom.GetExits());
+        unusedExits.AddRange(startRoom.GetExits());
         spawnedRoomsCount += 1;
 
-        while (spawnedRoomsCount < maxRooms && openExits.Count > 0 && currentAttempts < maxAttempts)
+        while (spawnedRoomsCount < maxRooms && unusedExits.Count > 0 && currentAttempts < maxAttempts)
         {
             RoomExit exitToConnect = PickRandomExit();
 
@@ -73,7 +82,6 @@ public class RoomSpawner : MonoBehaviour
 
             if (prefabRoomToSpawn == null)
             {
-                openExits.Remove(exitToConnect);
                 continue;
             }
 
@@ -92,11 +100,13 @@ public class RoomSpawner : MonoBehaviour
             }
 
             spawnedRooms.Add(newRoom);
+            exitToConnect.collisionIsEntryWay = true;
+            exitToConnect.CloseExit();
             spawnedRoomsCount += 1;
 
             foreach (RoomExit newExit in newRoom.GetExits())
             {
-                openExits.Add(newExit);
+                unusedExits.Add(newExit);
             }
 
             foreach (EnemySpawnPoints enemySpawn in newRoom.GetEnemySpawnPoints())
@@ -104,7 +114,8 @@ public class RoomSpawner : MonoBehaviour
                 allEnemySpawnPoints.Add(enemySpawn);
             }
 
-            openExits.Remove(exitToConnect);
+            unusedExits.Remove(exitToConnect);
+            exitsUsed.Add(exitToConnect);
         }
     }
 
@@ -118,8 +129,8 @@ public class RoomSpawner : MonoBehaviour
 
     private RoomExit PickRandomExit()
     {
-        int index = Random.Range(0, openExits.Count);
-        return openExits[index];
+        int index = Random.Range(0, unusedExits.Count);
+        return unusedExits[index];
     }
 
 

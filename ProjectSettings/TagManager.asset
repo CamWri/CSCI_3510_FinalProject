@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - GeneratedRoom
+  - Skeleton
+  - Zombie
+  - Exit
+  - Interactable
   layers:
   - Default
   - TransparentFX
