@@ -345,10 +345,16 @@ MonoBehaviour:
   damage: 60
   ammo: 30
   reloadTime: 1.5
+  isAuto: 1
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 267405334}
   fireSound: {fileID: 8300000, guid: a155cdb3066103446bb0bc7ab1953ced, type: 3}
   reloadSound: {fileID: 8300000, guid: 5c5e39cc943cab2499920cf2865f7355, type: 3}
+  recoilAmount: 20
+  maxRecoil: {x: 3, y: 15}
+  recoilSpeed: 10
+  resetRecoilSpeed: 15
+  playerCam: {fileID: 2125158402}
 --- !u!82 &267405334
 AudioSource:
   m_ObjectHideFlags: 0
@@ -575,10 +581,16 @@ MonoBehaviour:
   damage: 15
   ammo: 30
   reloadTime: 1
+  isAuto: 0
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 619612924}
   fireSound: {fileID: 8300000, guid: aebd34a0ab95eef43bbe4adc7c530a2f, type: 3}
   reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
+  recoilAmount: 20
+  maxRecoil: {x: 3, y: 10}
+  recoilSpeed: 5
+  resetRecoilSpeed: 7.5
+  playerCam: {fileID: 2125158402}
 --- !u!82 &619612924
 AudioSource:
   m_ObjectHideFlags: 0
@@ -903,10 +915,16 @@ MonoBehaviour:
   damage: 30
   ammo: 30
   reloadTime: 1.2
+  isAuto: 1
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 1051324365}
   fireSound: {fileID: 8300000, guid: 223baf287c084e44a81ef743eaf87532, type: 3}
   reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
+  recoilAmount: 25
+  maxRecoil: {x: 3, y: 10}
+  recoilSpeed: 5
+  resetRecoilSpeed: 10
+  playerCam: {fileID: 2125158402}
 --- !u!82 &1051324365
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1265,10 +1283,16 @@ MonoBehaviour:
   damage: 20
   ammo: 30
   reloadTime: 0.75
+  isAuto: 1
   muzzleFlash: {fileID: 0}
   audioSource: {fileID: 1518894709}
   fireSound: {fileID: 8300000, guid: 2654f33d811a3b243957877b8bdb63c4, type: 3}
   reloadSound: {fileID: 8300000, guid: 00dc0e9ea6160b24a8bf01d3831c75ff, type: 3}
+  recoilAmount: 1
+  maxRecoil: {x: 3, y: 7.5}
+  recoilSpeed: 3
+  resetRecoilSpeed: 5
+  playerCam: {fileID: 2125158402}
 --- !u!82 &1518894709
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1684,6 +1708,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7922365694618094045, guid: 463fdc8764472c140af8ade8f791b6de, type: 3}
   m_PrefabInstance: {fileID: 143111782}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2125158402 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4781679570761396682, guid: 463fdc8764472c140af8ade8f791b6de, type: 3}
+  m_PrefabInstance: {fileID: 143111782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f8dc3f43761d645ac46980ca4473f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -3,27 +3,36 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [Header("Gun Data")]
     public float range = 100f;
     public float fireRate = 1.0f;
     public float damage = 30f;
     public int ammo = 30;
     public float reloadTime = 1f;
-    float reloadMovementTime;
+    public bool isAuto = false;
 
-    Vector3 currentPosition;
-
+    private float nextTimeToFire;
+    float reloadStartTime;
+    bool reloading;
+    int currentAmmo;
+    [Header("Gun Animations/Sound")]
     public ParticleSystem muzzleFlash;
-
     public AudioSource audioSource;
     public AudioClip fireSound;
     public AudioClip reloadSound;
 
-    private Camera fpsCamera;
-    private float nextTimeToFire;
+    float reloadMovementTime;
+    Vector3 currentPosition;
+    [Header("Gun Recoil")]
+    public float recoilAmount;
+    public Vector2 maxRecoil;
+    public float recoilSpeed;
+    public float resetRecoilSpeed;
 
-    float reloadStartTime;
-    bool reloading;
-    int currentAmmo;
+    [Header("Camera Input Object")]
+    public NewMonoBehaviourScript playerCam;
+    private Camera fpsCamera;
+
     private void Start()
     {
         fpsCamera = GameObject.Find("CameraHolder/Main Camera").GetComponent<Camera>();
@@ -37,7 +46,7 @@ public class Gun : MonoBehaviour
     {
         bool ready = Time.time > nextTimeToFire;
 
-        if (Input.GetButtonDown("Fire1") && ready && currentAmmo != 0)
+        if ((isAuto ? Input.GetButton("Fire1") : Input.GetButtonDown("Fire1")) && ready && currentAmmo != 0)
         {
             Shoot();
         }
@@ -62,6 +71,7 @@ public class Gun : MonoBehaviour
                 Debug.Log("Reload Done");
             }
         }
+        playerCam.ResetRecoil(resetRecoilSpeed);
     }
 
     void Shoot()
@@ -74,6 +84,7 @@ public class Gun : MonoBehaviour
         {
             audioSource.PlayOneShot(fireSound, 0.7f);
         }
+        playerCam.ApplyRecoil(maxRecoil, recoilAmount, recoilSpeed);
 
         currentAmmo -= 1;
         Debug.Log("Current ammo: " + currentAmmo);
@@ -94,6 +105,7 @@ public class Gun : MonoBehaviour
 
     void Reload()
     {
+        currentAmmo = ammo;
         reloading = true;
         reloadStartTime = Time.time;
         audioSource.PlayOneShot(reloadSound, 0.7f);
