@@ -3,14 +3,16 @@ using System.Collections.Generic;
 
 public enum RoomExitType
 {
-    Door
+    WoodenRoundDoor,
+    WoodenSquareDoor,
 }
 
 public static class RoomExitTypeExtension
 {
     public static readonly Dictionary<RoomExitType, string> displayNames = new Dictionary<RoomExitType, string>
     {
-        { RoomExitType.Door, "Door Exit" },
+        { RoomExitType.WoodenRoundDoor, "Wooden Round Door" },
+        { RoomExitType.WoodenSquareDoor, "Wooden Square Door" },
     };
 
     public static string ToDisplayName(this RoomExitType type)

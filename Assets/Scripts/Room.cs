@@ -9,9 +9,16 @@ public class Room : MonoBehaviour
 
     public List<RoomExit> exits = new();
 
+    public List<EnemySpawnPoints> enemySpawnPoints = new();
+
     public int generationOrder;
 
     public bool markForDelete = false;
+
+    public List<EnemySpawnPoints> GetEnemySpawnPoints()
+    {
+        return enemySpawnPoints;
+    }
 
     public List<RoomExit> GetExits()
     {
