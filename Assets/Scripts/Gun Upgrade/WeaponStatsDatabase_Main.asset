@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec32a963c913e844a7bfbc1689eb29d, type: 3}
+  m_Name: WeaponStatsDatabase_Main
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponStatsDatabase
+  weaponStats:
+  - weaponType: 0
+    baseDamage: 0
+    baseAmmo: 0
+    commonDamage: 0
+    commonAmmo: 0
+    rareDamage: 0
+    rareAmmo: 0
+    epicDamage: 0
+    epicAmmo: 0
+    legendaryDamage: 0
+    legendaryAmmo: 0
+  - weaponType: 1
+    baseDamage: 0
+    baseAmmo: 0
+    commonDamage: 0
+    commonAmmo: 0
+    rareDamage: 0
+    rareAmmo: 0
+    epicDamage: 0
+    epicAmmo: 0
+    legendaryDamage: 0
+    legendaryAmmo: 0
+  - weaponType: 2
+    baseDamage: 0
+    baseAmmo: 0
+    commonDamage: 0
+    commonAmmo: 0
+    rareDamage: 0
+    rareAmmo: 0
+    epicDamage: 0
+    epicAmmo: 0
+    legendaryDamage: 0
+    legendaryAmmo: 0
+  - weaponType: 3
+    baseDamage: 0
+    baseAmmo: 0
+    commonDamage: 0
+    commonAmmo: 0
+    rareDamage: 0
+    rareAmmo: 0
+    epicDamage: 0
+    epicAmmo: 0
+    legendaryDamage: 0
+    legendaryAmmo: 0
