@@ -78,6 +78,7 @@ public class Gun : MonoBehaviour
     {
         if (muzzleFlash != null)
         {
+            muzzleFlash.Emit(1);
             muzzleFlash.Play();
         }
         if (audioSource != null && fireSound != null)
