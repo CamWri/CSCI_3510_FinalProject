@@ -22,6 +22,8 @@ public class Gun : MonoBehaviour
     public AudioClip reloadSound;
 
     float reloadMovementTime;
+    bool shootAnimation;
+    float shootAnimationStartTime;
     Vector3 currentPosition;
     [Header("Gun Recoil")]
     public float recoilAmount;
@@ -49,6 +51,7 @@ public class Gun : MonoBehaviour
         if ((isAuto ? Input.GetButton("Fire1") : Input.GetButtonDown("Fire1")) && ready && currentAmmo != 0)
         {
             Shoot();
+            currentPosition = transform.localPosition;
         }
         else if(currentAmmo == 0)
         {
@@ -71,6 +74,15 @@ public class Gun : MonoBehaviour
                 Debug.Log("Reload Done");
             }
         }
+        if (shootAnimation)
+        {
+            transform.localPosition = Vector3.Lerp(currentPosition, new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z - .01f), -Math.Abs(4 * (Time.time - shootAnimationStartTime) - fireRate) / fireRate + 1f);
+            if(Time.time > (shootAnimationStartTime + fireRate/2))
+            {
+                shootAnimation = false;
+            }
+        }
+
         playerCam.ResetRecoil(resetRecoilSpeed);
     }
 
@@ -100,7 +112,8 @@ public class Gun : MonoBehaviour
                 target.Process(hit, damage);
             }
         }
-
+        shootAnimation = true;
+        shootAnimationStartTime = Time.time;
         nextTimeToFire = Time.time + fireRate;
     }
 
@@ -110,9 +123,6 @@ public class Gun : MonoBehaviour
         reloading = true;
         reloadStartTime = Time.time;
         audioSource.PlayOneShot(reloadSound, 0.7f);
-        //reload movement
-        // Reload sound
-
 
         Debug.Log("Reloading....");
         nextTimeToFire = Time.time + reloadTime;

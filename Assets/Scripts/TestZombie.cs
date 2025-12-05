@@ -16,8 +16,6 @@ public class TestZombie : Target
         if (gameObject.tag == "TestZombie")
         {
             hitCount += 1;
-            Debug.Log("Ow");
-            Debug.Log("Hit Count: " + hitCount);
             currentHealth = health - hitCount*dmg;
             if (currentHealth <= 0f)
             {

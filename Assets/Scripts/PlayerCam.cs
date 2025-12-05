@@ -42,7 +42,6 @@ public class NewMonoBehaviourScript : MonoBehaviour
         targetRecoil += new Vector3(recoilX, recoilY, 0);
 
         currentRecoil = Vector3.MoveTowards(currentRecoil, targetRecoil, recoilSpeed);
-        Debug.Log("Applying : " + targetRecoil);
     }
 
     public void ResetRecoil(float resetRecoilSpeed)
