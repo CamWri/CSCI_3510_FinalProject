@@ -9,6 +9,7 @@ TagManager:
   - Zombie
   - Exit
   - Interactable
+  - TestZombie
   layers:
   - Default
   - TransparentFX
