@@ -20,7 +20,8 @@ public class Skeleton : MonoBehaviour
     public float deathDuration = 1f;
 
     [Header("Stats")]
-    public float health = 100f;
+    public float health = 35;
+    public float damage = 1;
 
     bool isSpawning = true;
     bool isDead = false;
@@ -80,6 +81,17 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    public void UpdateStats(int floor, int round)
+    {
+        float floorMultiplier = 1 + (floor - 1) * 0.2f;    // 20% increase per floor
+        float roundMultiplier = 1 + (round - 1) * 0.1f;    // 10% increase per round
+
+        health *= floorMultiplier * roundMultiplier;
+        walkSpeed *= 1 + 0.05f * (floor + round);
+        damage *= 1 + 0.05f * (floor + round);
+    }
+
+
     void MoveTowardPlayer()
     {
         agent.isStopped = false;
@@ -122,6 +134,7 @@ public class Skeleton : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        Debug.Log("TakeDamage() is called");
         if (isDead) return;
 
         health -= amount;
@@ -134,14 +147,26 @@ public class Skeleton : MonoBehaviour
     void Die()
     {
         isDead = true;
+
+        // Stop movement
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
 
+        // Play death animation
         anim.SetBool("isDead", true);
 
+        // Disable collisions so the dead skeleton doesn't block anything
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // Optionally disable NavMeshAgent so it doesn't interfere
+        if (agent != null) agent.enabled = false;
+
+        // Notify round manager
         if (roundManager != null)
             roundManager.OnSkeletonKilled();
 
+        // Destroy after animation duration
         Destroy(gameObject, deathDuration);
     }
 }
