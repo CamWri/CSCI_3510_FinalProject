@@ -403,6 +403,10 @@ PrefabInstance:
       propertyPath: orientation
       value: 
       objectReference: {fileID: 1044544896}
+    - target: {fileID: 2697786101331364237, guid: c40bceb377146b04c84079018c2d421a, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 9655
+      objectReference: {fileID: 0}
     - target: {fileID: 3377648522475310274, guid: c40bceb377146b04c84079018c2d421a, type: 3}
       propertyPath: m_Name
       value: CameraHolder
@@ -893,6 +897,22 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 453633788}
+    - target: {fileID: 1887237755233816892, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187198874362521115, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488224061083930473, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3789095598585091522, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 8192
+      objectReference: {fileID: 0}
     - target: {fileID: 4207580726102855246, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.23
@@ -938,8 +958,20 @@ PrefabInstance:
       value: PCController
       objectReference: {fileID: 0}
     - target: {fileID: 4554427671739438083, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4554427671739438083, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6368534193751507698, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9117415459970976454, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -951,6 +983,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4554427671739438083, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1044544897}
+    - targetCorrespondingSourceObject: {fileID: 4554427671739438083, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1044544902}
   m_SourcePrefab: {fileID: 100100000, guid: a5f9563a51243994d945c58de2346e1b, type: 3}
 --- !u!1 &1044544893 stripped
 GameObject:
@@ -997,6 +1032,26 @@ MonoBehaviour:
   - {fileID: 159021631720126276, guid: f222334fd4a01a14793c3549b9d65f08, type: 3}
   - {fileID: 1246608046841023207, guid: 8178babebc0143a4fa8ffda23ff7932d, type: 3}
   - {fileID: 3050105396331009746, guid: e822ab43a17259e4d8109c990c941763, type: 3}
+--- !u!114 &1044544902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044544893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1641b7ef3a785ed4db67031ab1ee191f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 1
+  invincible: 0
+  onTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1170782497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,7 +1097,7 @@ MonoBehaviour:
   - {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   - {fileID: 3619385842440502987, guid: c8af26974f6dcb543913a0777c16abd7, type: 3}
   - {fileID: 3619385842440502987, guid: 4ecda5da3e6fc1e4d9ca15b5d62d326f, type: 3}
-  maxRooms: 25
+  maxRooms: 2
   maxAttempts: 500
   spawnedRooms: []
   unusedExits: []
@@ -1109,7 +1164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombieRoundManager
   skeletonPrefab: {fileID: 1571042049591659991, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
-  startingSkeletons: 5
+  startingSkeletons: 1
   spawnInterval: 0.5
   round: 1
   roundDelay: 2.5

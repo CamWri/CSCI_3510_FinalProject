@@ -9,6 +9,7 @@ public class Skeleton : MonoBehaviour
     public Transform player;
     public Animator anim;
     public NavMeshAgent agent;
+    public Collider swordHitbox;
 
     private SkeletonRoundManager roundManager;
 
@@ -52,6 +53,13 @@ public class Skeleton : MonoBehaviour
         // Spawn animation setup
         agent.speed = 0f;
         anim.SetBool("isSpawning", true);
+        swordHitbox.enabled = false;
+
+        Collider bodyCollider = GetComponent<Collider>();
+        if (bodyCollider != null)
+        {
+            Physics.IgnoreCollision(swordHitbox, bodyCollider, true);
+        }
 
         Invoke(nameof(FinishSpawn), spawnDuration);
     }
@@ -115,22 +123,44 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    public void EnableHitbox() => swordHitbox.enabled = true;
+    public void DisableHitbox() => swordHitbox.enabled = false;
+
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
 
-        yield return new WaitForSeconds(attackAnimationLength);
+        // --- DAMAGE WINDOW SETTINGS ---
+        float damageStart = 0.3f;   // when damage begins
+        float damageEnd = 0.6f;     // when damage ends
+        // ------------------------------
 
-        // Sync agent's internal position to the model
+        // Wait until damage start moment
+        yield return new WaitForSeconds(damageStart);
+
+        // Enable continuous damage checks
+        float elapsed = 0f;
+        while (elapsed < (damageEnd - damageStart))
+        {
+            DealSwordDamage();
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Wait the rest of the animation AFTER the damage window
+        float remaining = attackAnimationLength - damageEnd;
+        if (remaining > 0)
+            yield return new WaitForSeconds(remaining);
+
+        // Sync agent after attack
         agent.nextPosition = transform.position;
-
-        // Re-enable movement
         agent.updatePosition = true;
         agent.updateRotation = true;
         agent.isStopped = false;
 
         isAttacking = false;
     }
+
 
     public void TakeDamage(float amount)
     {
@@ -168,5 +198,26 @@ public class Skeleton : MonoBehaviour
 
         // Destroy after animation duration
         Destroy(gameObject, deathDuration);
+    }
+    public void DealSwordDamage()
+    {
+        if (!isAttacking) return; // ensure mid-attack
+
+        float hitRadius = 0.8f;     // tune based on sword size
+        float hitDistance = 2f;     // reach of the attack
+
+        Vector3 origin = transform.position + Vector3.up * 1.0f; // chest height
+        Vector3 direction = transform.forward;
+
+        int mask = LayerMask.GetMask("Player"); // only hit player
+
+        if (Physics.SphereCast(origin, hitRadius, direction, out RaycastHit hit, hitDistance, mask))
+        {
+            PlayerHealth health = hit.collider.GetComponentInParent<PlayerHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(damage);
+            }
+        }
     }
 }
