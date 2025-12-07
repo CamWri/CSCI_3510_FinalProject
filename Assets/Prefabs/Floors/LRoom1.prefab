@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1193959080099863299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4802652584413540615}
+  m_Layer: 0
+  m_Name: WallBuyLocations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4802652584413540615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193959080099863299}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7416660547463170837}
+  m_Father: {fileID: 2584075093522630256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1468207820681448426
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +340,37 @@ MonoBehaviour:
   doorPrefab: {fileID: 7973182253187241520}
   wallPrefab: {fileID: 2340993585862137567}
   collisionIsEntryWay: 0
+--- !u!1 &4626640696081839337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7416660547463170837}
+  m_Layer: 0
+  m_Name: WallBuy1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7416660547463170837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4626640696081839337}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 7.314, y: 0.5, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4802652584413540615}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &5063222836123341011
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,6 +756,7 @@ Transform:
   - {fileID: 1141470695239138971}
   - {fileID: 8613565245855283646}
   - {fileID: 9142291805882685143}
+  - {fileID: 4802652584413540615}
   m_Father: {fileID: 7514410219848952202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6302313813069148890
@@ -800,6 +864,8 @@ MonoBehaviour:
   - {fileID: 5571130801394938710}
   generationOrder: 0
   markForDelete: 0
+  wallBuyLocations:
+  - {fileID: 7416660547463170837}
 --- !u!65 &3096768992356210665
 BoxCollider:
   m_ObjectHideFlags: 0

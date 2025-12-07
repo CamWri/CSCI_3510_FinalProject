@@ -103,9 +103,6 @@ PrefabInstance:
       addedObject: {fileID: 3745788345082854289}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be3776e9bd6e31341b3490a035f6ea50, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8290541419620833472}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be3776e9bd6e31341b3490a035f6ea50, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2583532187025955427}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be3776e9bd6e31341b3490a035f6ea50, type: 3}
       insertIndex: -1
@@ -165,19 +162,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8290541419620833472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1571042049591659991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d90128c7cb70e374bb13b3e901488dcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestAgent
-  radius: 500
 --- !u!114 &2583532187025955427
 MonoBehaviour:
   m_ObjectHideFlags: 0

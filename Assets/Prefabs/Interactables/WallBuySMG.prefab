@@ -108,15 +108,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6997417127840186166, guid: d7791594d53f2a9489a02a65171f508c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6997417127840186166, guid: d7791594d53f2a9489a02a65171f508c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6997417127840186166, guid: d7791594d53f2a9489a02a65171f508c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6997417127840186166, guid: d7791594d53f2a9489a02a65171f508c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 0.29803923, g: 0.73333335, b: 0.78431374, a: 1}
   outlineWidth: 5
   precomputeOutline: 0

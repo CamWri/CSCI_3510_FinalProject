@@ -102,9 +102,42 @@ public class Skeleton : MonoBehaviour
 
     void MoveTowardPlayer()
     {
+        if (agent == null || player == null) return;
+
         agent.isStopped = false;
-        agent.SetDestination(player.position);
-        anim.SetFloat("speed", agent.speed);
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+
+        // Calculate path to the player's current position
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(player.position, path);
+
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
+            // Player is reachable
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            // Player unreachable → go to the last reachable corner along the path
+            if (path.corners.Length > 0)
+            {
+                Vector3 lastReachable = path.corners[path.corners.Length - 1];
+                agent.SetDestination(lastReachable);
+            }
+            else
+            {
+                // Optional: snap to nearest NavMesh point to avoid agent being stuck
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(player.position, out hit, 5f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(hit.position);
+                }
+            }
+        }
+
+        // Update animation based on agent speed
+        anim.SetFloat("speed", agent.velocity.magnitude);
     }
 
     void TryAttack()

@@ -1,19 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
-using System.Collections;
 
 public class RoomSpawner : MonoBehaviour
 {
-    /*
-        Future Notes:
-            - For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
-    */
-
     [Header("Zombie Spawning")]
     public SkeletonRoundManager skeletonRoundManager;
-    
+
     [Header("Player")]
     public GameObject player;
 
@@ -22,14 +17,17 @@ public class RoomSpawner : MonoBehaviour
     public List<Room> roomPrefabs;
     public int maxRooms = 10;
     public int maxAttempts = 5;
-    private int currentAttempts = 0;
+    public int wallBuyCount = 1;
 
-    private int spawnedRoomsCount;
+    private int currentAttempts = 0;
+    private int spawnedRoomsCount = 0;
+
     public List<Room> spawnedRooms = new();
     public List<RoomExit> unusedExits = new();
     public List<RoomExit> exitsUsed = new();
 
-
+    public List<WallBuy> possibleWallBuys = new();
+    private List<Transform> wallBuyLocations = new();
     public List<EnemySpawnPoints> allEnemySpawnPoints = new();
 
     public NavMeshSurface globalNavMeshSurface;
@@ -41,83 +39,91 @@ public class RoomSpawner : MonoBehaviour
 
     private void Start()
     {
-        GenerateNewLevel();
+        StartCoroutine(GenerateLevelRoutine());
     }
 
-    public void GenerateNewLevel()
+    /// <summary>
+    /// Full async generation pipeline
+    /// </summary>
+    private IEnumerator GenerateLevelRoutine()
     {
-        Generate();
-        StartCoroutine(BuildNavMesh());
-        foreach (RoomExit exit in unusedExits)
-        {
-            exit.CloseExit();
-        }
+        // Disable all NavMeshAgents until generation completes
+        DisableAllAgents();
 
-        foreach (RoomExit exit in exitsUsed)
-        {
-            exit.CloseExit();
-        }
+        // Generate rooms
+        GenerateRooms();
 
+        // Close all exits
+        foreach (RoomExit exit in unusedExits) exit.CloseExit();
+        foreach (RoomExit exit in exitsUsed) exit.CloseExit();
+
+        // Wait a frame so all room transforms settle
+        yield return null;
+
+        // Build the NavMesh
+        globalNavMeshSurface.BuildNavMesh();
+
+        // Wait one frame to ensure NavMesh jobs finish
+        yield return new WaitForEndOfFrame();
+
+        // Re-enable NavMeshAgents
+        EnableAllAgents();
+
+        // Spawn wall buys
+        for (int i = 0; i < wallBuyCount; i++)
+            SpawnRandomWallBuy();
+
+        // Start enemy spawning
         skeletonRoundManager.startEnemySpawning(allEnemySpawnPoints);
     }
 
-    private IEnumerator BuildNavMesh()
+    /// <summary>
+    /// Generates rooms and collects exits, wall buys, and enemy spawn points
+    /// </summary>
+    private void GenerateRooms()
     {
-        yield return new WaitForEndOfFrame();
-        globalNavMeshSurface.BuildNavMesh();
-    } 
-
-    public void Generate()
-    {
+        // --- Start Room ---
         Room startRoom = InstantiateRoom(StartRoom, Vector3.zero, Quaternion.identity);
         spawnedRooms.Add(startRoom);
         unusedExits.AddRange(startRoom.GetExits());
-        spawnedRoomsCount += 1;
+        wallBuyLocations.AddRange(startRoom.GetWallBuyLocations());
+        spawnedRoomsCount++;
 
+        // --- Procedural Generation Loop ---
         while (spawnedRoomsCount < maxRooms && unusedExits.Count > 0 && currentAttempts < maxAttempts)
         {
             RoomExit exitToConnect = PickRandomExit();
+            Room prefabRoom = PickCompatibleRoom(exitToConnect);
 
-            Room prefabRoomToSpawn = PickCompatibleRoom(exitToConnect);
+            if (prefabRoom == null)
+                continue;
 
-            if (prefabRoomToSpawn == null)
+            Room newRoom = SpawnRoomAtExit(prefabRoom, exitToConnect);
+            currentAttempts++;
+
+            if (newRoom == null || CheckOverlap(newRoom))
             {
+                Destroy(newRoom?.gameObject);
                 continue;
             }
 
-            Room newRoom = SpawnRoomAtExit(prefabRoomToSpawn, exitToConnect);
-            currentAttempts += 1;
-
-            if (newRoom == null)
-            {
-                continue;
-            }
-
-            if (CheckOverlap(newRoom))
-            {
-                Destroy(newRoom.gameObject);
-                continue;
-            }
-
+            // Add room to lists
             spawnedRooms.Add(newRoom);
             exitToConnect.collisionIsEntryWay = true;
             exitToConnect.CloseExit();
-            spawnedRoomsCount += 1;
+            spawnedRoomsCount++;
 
-            foreach (RoomExit newExit in newRoom.GetExits())
-            {
-                unusedExits.Add(newExit);
-            }
+            unusedExits.AddRange(newRoom.GetExits());
+            allEnemySpawnPoints.AddRange(newRoom.GetEnemySpawnPoints());
+            wallBuyLocations.AddRange(newRoom.GetWallBuyLocations());
 
-            foreach (EnemySpawnPoints enemySpawn in newRoom.GetEnemySpawnPoints())
-            {
-                allEnemySpawnPoints.Add(enemySpawn);
-            }
-
+            // Move exits from unused → used
             unusedExits.Remove(exitToConnect);
             exitsUsed.Add(exitToConnect);
         }
     }
+
+    #region Helper Methods
 
     private Room InstantiateRoom(Room prefab, Vector3 position, Quaternion rotation)
     {
@@ -132,7 +138,6 @@ public class RoomSpawner : MonoBehaviour
         int index = Random.Range(0, unusedExits.Count);
         return unusedExits[index];
     }
-
 
     private Room PickCompatibleRoom(RoomExit existingExit)
     {
@@ -150,21 +155,15 @@ public class RoomSpawner : MonoBehaviour
             }
         }
 
-        if (compatibleRooms.Count == 0)
-        {
-            return null;
-        }
-
-        int randomIndex = Random.Range(0, compatibleRooms.Count);
-        return compatibleRooms[randomIndex];
+        if (compatibleRooms.Count == 0) return null;
+        return compatibleRooms[Random.Range(0, compatibleRooms.Count)];
     }
 
     private Room SpawnRoomAtExit(Room prefab, RoomExit exitToConnect)
     {
         Quaternion rotation = Quaternion.LookRotation(exitToConnect.transform.forward, Vector3.up);
         Vector3 spawnPosition = exitToConnect.transform.position;
-        Room newRoom = InstantiateRoom(prefab, spawnPosition, rotation);
-        return newRoom;
+        return InstantiateRoom(prefab, spawnPosition, rotation);
     }
 
     private bool CheckOverlap(Room newRoom)
@@ -177,14 +176,40 @@ public class RoomSpawner : MonoBehaviour
             foreach (var hit in overlaps)
             {
                 Room otherRoom = hit.GetComponentInParent<Room>();
-                if (otherRoom != null && otherRoom != newRoom)
-                {
-                    if (newRoom.generationOrder > otherRoom.generationOrder)
-                        return true;
-                }
+                if (otherRoom != null && otherRoom != newRoom && newRoom.generationOrder > otherRoom.generationOrder)
+                    return true;
             }
         }
 
         return false;
     }
+
+    private void SpawnRandomWallBuy()
+    {
+        if (possibleWallBuys.Count == 0 || wallBuyLocations.Count == 0)
+        {
+            Debug.LogWarning("No wall buy prefabs or locations assigned!");
+            return;
+        }
+
+        WallBuy prefab = possibleWallBuys[Random.Range(0, possibleWallBuys.Count)];
+        Transform location = wallBuyLocations[Random.Range(0, wallBuyLocations.Count)];
+
+        WallBuy newWallBuy = Instantiate(prefab, location.position, location.rotation);
+        wallBuyLocations.Remove(location);
+    }
+
+    private void DisableAllAgents()
+    {
+        foreach (var agent in FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None))
+            agent.enabled = false;
+    }
+
+    private void EnableAllAgents()
+    {
+        foreach (var agent in FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None))
+            agent.enabled = true;
+    }
+
+    #endregion
 }

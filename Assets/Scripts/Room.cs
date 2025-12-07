@@ -15,6 +15,8 @@ public class Room : MonoBehaviour
 
     public bool markForDelete = false;
 
+    public List<Transform> wallBuyLocations;
+
     public List<EnemySpawnPoints> GetEnemySpawnPoints()
     {
         return enemySpawnPoints;
@@ -23,6 +25,11 @@ public class Room : MonoBehaviour
     public List<RoomExit> GetExits()
     {
         return exits;
+    }
+
+    public List<Transform> GetWallBuyLocations()
+    {
+        return wallBuyLocations;
     }
 
     private void OnTriggerEnter(Collider other)
