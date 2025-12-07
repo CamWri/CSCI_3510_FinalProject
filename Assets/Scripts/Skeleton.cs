@@ -9,6 +9,7 @@ public class Skeleton : MonoBehaviour
     public Transform player;
     public Animator anim;
     public NavMeshAgent agent;
+    public Collider swordHitbox;
 
     private SkeletonRoundManager roundManager;
 
@@ -20,7 +21,8 @@ public class Skeleton : MonoBehaviour
     public float deathDuration = 1f;
 
     [Header("Stats")]
-    public float health = 100f;
+    public float health = 35;
+    public float damage = 1;
 
     bool isSpawning = true;
     bool isDead = false;
@@ -51,6 +53,13 @@ public class Skeleton : MonoBehaviour
         // Spawn animation setup
         agent.speed = 0f;
         anim.SetBool("isSpawning", true);
+        swordHitbox.enabled = false;
+
+        Collider bodyCollider = GetComponent<Collider>();
+        if (bodyCollider != null)
+        {
+            Physics.IgnoreCollision(swordHitbox, bodyCollider, true);
+        }
 
         Invoke(nameof(FinishSpawn), spawnDuration);
     }
@@ -80,6 +89,17 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    public void UpdateStats(int floor, int round)
+    {
+        float floorMultiplier = 1 + (floor - 1) * 0.2f;    // 20% increase per floor
+        float roundMultiplier = 1 + (round - 1) * 0.1f;    // 10% increase per round
+
+        health *= floorMultiplier * roundMultiplier;
+        walkSpeed *= 1 + 0.05f * (floor + round);
+        damage *= 1 + 0.05f * (floor + round);
+    }
+
+
     void MoveTowardPlayer()
     {
         agent.isStopped = false;
@@ -103,16 +123,37 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    public void EnableHitbox() => swordHitbox.enabled = true;
+    public void DisableHitbox() => swordHitbox.enabled = false;
+
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
 
-        yield return new WaitForSeconds(attackAnimationLength);
+        // --- DAMAGE WINDOW SETTINGS ---
+        float damageStart = 0.3f;   // when damage begins
+        float damageEnd = 0.6f;     // when damage ends
+        // ------------------------------
 
-        // Sync agent's internal position to the model
+        // Wait until damage start moment
+        yield return new WaitForSeconds(damageStart);
+
+        // Enable continuous damage checks
+        float elapsed = 0f;
+        while (elapsed < (damageEnd - damageStart))
+        {
+            DealSwordDamage();
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Wait the rest of the animation AFTER the damage window
+        float remaining = attackAnimationLength - damageEnd;
+        if (remaining > 0)
+            yield return new WaitForSeconds(remaining);
+
+        // Sync agent after attack
         agent.nextPosition = transform.position;
-
-        // Re-enable movement
         agent.updatePosition = true;
         agent.updateRotation = true;
         agent.isStopped = false;
@@ -120,8 +161,10 @@ public class Skeleton : MonoBehaviour
         isAttacking = false;
     }
 
+
     public void TakeDamage(float amount)
     {
+        Debug.Log("TakeDamage() is called");
         if (isDead) return;
 
         health -= amount;
@@ -134,14 +177,47 @@ public class Skeleton : MonoBehaviour
     void Die()
     {
         isDead = true;
+
+        // Stop movement
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
 
+        // Play death animation
         anim.SetBool("isDead", true);
 
+        // Disable collisions so the dead skeleton doesn't block anything
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // Optionally disable NavMeshAgent so it doesn't interfere
+        if (agent != null) agent.enabled = false;
+
+        // Notify round manager
         if (roundManager != null)
             roundManager.OnSkeletonKilled();
 
+        // Destroy after animation duration
         Destroy(gameObject, deathDuration);
+    }
+    public void DealSwordDamage()
+    {
+        if (!isAttacking) return; // ensure mid-attack
+
+        float hitRadius = 0.8f;     // tune based on sword size
+        float hitDistance = 2f;     // reach of the attack
+
+        Vector3 origin = transform.position + Vector3.up * 1.0f; // chest height
+        Vector3 direction = transform.forward;
+
+        int mask = LayerMask.GetMask("Player"); // only hit player
+
+        if (Physics.SphereCast(origin, hitRadius, direction, out RaycastHit hit, hitDistance, mask))
+        {
+            PlayerHealth health = hit.collider.GetComponentInParent<PlayerHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(damage);
+            }
+        }
     }
 }

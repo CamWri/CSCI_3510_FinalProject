@@ -14,6 +14,8 @@ public class TestAgent : MonoBehaviour
 
     void Update()
     {
+        if (agent == null || !agent.enabled) return;  // ← prevents the error
+        
         // When agent reaches the destination, pick a new one
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {

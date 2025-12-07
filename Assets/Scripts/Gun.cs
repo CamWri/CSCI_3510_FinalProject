@@ -32,7 +32,7 @@ public class Gun : MonoBehaviour
     public float resetRecoilSpeed;
 
     [Header("Camera Input Object")]
-    public NewMonoBehaviourScript playerCam;
+    public PlayerCam playerCam;
     private Camera fpsCamera;
 
     private void Start()
@@ -105,13 +105,16 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            Target target = hit.transform.GetComponent<Target>();
-
-            if (target != null) 
+            Debug.Log("Ray hit: " + hit.collider.name + " (gameObject: " + hit.collider.gameObject.name + ")");
+            // Try to damage skeleton
+            Skeleton skeleton = hit.transform.GetComponent<Skeleton>();
+            if (skeleton != null)
             {
-                target.Process(hit, damage);
+                Debug.Log("Shot at a skeleton");
+                skeleton.TakeDamage(damage);
             }
         }
+
         shootAnimation = true;
         shootAnimationStartTime = Time.time;
         nextTimeToFire = Time.time + fireRate;
