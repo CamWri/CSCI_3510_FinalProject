@@ -409,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 1044544896}
     - target: {fileID: 2697786101331364237, guid: c40bceb377146b04c84079018c2d421a, type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 9655
+      value: 11703
       objectReference: {fileID: 0}
     - target: {fileID: 3377648522475310274, guid: c40bceb377146b04c84079018c2d421a, type: 3}
       propertyPath: m_Name
@@ -1310,7 +1310,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 2432
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0

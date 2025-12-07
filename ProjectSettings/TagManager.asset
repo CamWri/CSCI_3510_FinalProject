@@ -10,6 +10,7 @@ TagManager:
   - Exit
   - Interactable
   - TestZombie
+  - Decoration
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Wall
   - 
   - GeneratedRoom
-  - 
+  - Decoration
   - WeaponLayer
   - EnemyWeapon
   - Test
