@@ -5,16 +5,16 @@ using UnityEngine;
 public class SkeletonRoundManager : MonoBehaviour
 {
     [Header("Spawning Settings")]
-    public GameObject zombiePrefab;
+    public GameObject skeletonPrefab;
 
     [Header("Round Settings")]
-    public int startingZombies = 5;
+    public int startingSkeletons = 5;
     public float spawnInterval = 1f;
     public int round = 1;
     public float roundDelay = 5f;
 
-    private int zombiesToSpawn;   // how many still need to be spawned
-    private int zombiesAlive;     // how many are alive in the scene
+    private int skeletonsToSpawn;   // how many still need to be spawned
+    private int skeletonsAlive;     // how many are alive in the scene
     private bool roundActive;
 
     private List<EnemySpawnPoints> allEnemySpawnPoints;
@@ -22,6 +22,7 @@ public class SkeletonRoundManager : MonoBehaviour
     public void startEnemySpawning(List<EnemySpawnPoints> enemySpawnPositionList)
     {
         allEnemySpawnPoints = enemySpawnPositionList;
+        HUDController.Instance.UpdateRoundText(round);
         StartCoroutine(StartNextRound());
     }
 
@@ -32,23 +33,32 @@ public class SkeletonRoundManager : MonoBehaviour
         roundActive = true;
 
         // HOW MANY WILL SPAWN THIS ROUND
-        zombiesToSpawn = startingZombies + (round - 1) * 2;
+        skeletonsToSpawn = startingSkeletons + (round - 1) * 2;
         // RESET alive count
-        zombiesAlive = 0;
+        skeletonsAlive = 0;
 
         StartCoroutine(SpawnSkeletons());
     }
 
     IEnumerator SpawnSkeletons()
     {
-        while (zombiesToSpawn > 0)
+        while (skeletonsToSpawn > 0)
         {
             Transform spawn = allEnemySpawnPoints[Random.Range(0, allEnemySpawnPoints.Count)].transform;
 
-            Instantiate(zombiePrefab, spawn.position, spawn.rotation);
+            GameObject skeletonObj = Instantiate(skeletonPrefab, spawn.position, spawn.rotation);
 
-            zombiesToSpawn--;
-            zombiesAlive++;   // track alive zombies
+            // Apply scaling
+            Skeleton skeleton = skeletonObj.GetComponent<Skeleton>();
+            if (skeleton != null)
+            {
+                skeleton.UpdateStats(FloorManager.Instance.currentFloor, round);
+                Debug.Log(skeleton.health);
+                Debug.Log(skeleton.damage);
+            }
+
+            skeletonsToSpawn--;
+            skeletonsAlive++;   // track alive skeletons
 
             yield return new WaitForSeconds(spawnInterval);
         }
@@ -56,15 +66,18 @@ public class SkeletonRoundManager : MonoBehaviour
 
     public void OnSkeletonKilled()
     {
-        zombiesAlive--;
+        skeletonsAlive--;
 
-        Debug.Log($"Zombie killed. Alive: {zombiesAlive}");
+        HUDController.Instance.SkeletonKilled();
 
-        // When all zombies that were spawned are dead → new round
-        if (zombiesAlive <= 0 && roundActive)
+        Debug.Log($"Skeleton killed. Alive: {skeletonsAlive}");
+
+        // When all skeletons that were spawned are dead → new round
+        if (skeletonsAlive <= 0 && roundActive)
         {
             roundActive = false;
             round++;
+            HUDController.Instance.UpdateRoundText(round);
 
             Debug.Log($"Starting round {round}");
             StartCoroutine(StartNextRound());

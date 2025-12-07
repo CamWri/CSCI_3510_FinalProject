@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class PlayerCam : MonoBehaviour
 {
     public float sensX;
     public float sensY;

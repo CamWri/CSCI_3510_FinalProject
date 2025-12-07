@@ -30,6 +30,23 @@ public class CharacterMovement : MonoBehaviour
     public LayerMask groundMask;
     public Transform cameraTransform;
 
+    public static CharacterMovement Instance;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+
     void Start()
     {
         controller = GetComponent<CharacterController>();

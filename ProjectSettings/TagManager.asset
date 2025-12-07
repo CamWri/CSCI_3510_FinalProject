@@ -10,6 +10,7 @@ TagManager:
   - Exit
   - Interactable
   - TestZombie
+  - Decoration
   layers:
   - Default
   - TransparentFX
@@ -17,15 +18,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Player
   - Floor
   - Wall
   - 
   - GeneratedRoom
-  - 
+  - Decoration
   - WeaponLayer
-  - 
-  - 
+  - EnemyWeapon
+  - Test
   - 
   - 
   - 
