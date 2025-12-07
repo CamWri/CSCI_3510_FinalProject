@@ -4,30 +4,31 @@ public class GunSwap : MonoBehaviour
 {
     public GameObject[] guns;
     private int currentGunIndex = 0;
+
     private void Awake()
     {
-        foreach (GameObject gun in guns) { 
-            gun.SetActive(true);
-            gun.SetActive(false);
+        // Enable only the first gun
+        for (int i = 0; i < guns.Length; i++)
+        {
+            if (guns[i] != null)
+                guns[i].SetActive(i == currentGunIndex);
         }
     }
-    void Start()
-    {
-        Debug.Log("Current gun index: " + currentGunIndex);
-        SelectGun(currentGunIndex);
-    }
+
     public void SelectGun(int index)
     {
+        if (index < 0 || index >= guns.Length) return;
 
         for (int i = 0; i < guns.Length; i++)
         {
-            guns[i].SetActive(i == index);
+            if (guns[i] != null)
+                guns[i].SetActive(i == index);
         }
 
-
-
         currentGunIndex = index;
+        Debug.Log("Gun selected: " + index);
     }
+
     // Update is called once per frame
     void Update()
     {

@@ -112,6 +112,7 @@ public class Gun : MonoBehaviour
             {
                 Debug.Log("Shot at a skeleton");
                 skeleton.TakeDamage(damage);
+                PlayerMoneyManager.Instance.AddMoney(10);
             }
         }
 

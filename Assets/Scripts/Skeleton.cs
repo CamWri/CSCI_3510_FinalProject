@@ -170,6 +170,7 @@ public class Skeleton : MonoBehaviour
         health -= amount;
         if (health <= 0)
         {
+            PlayerMoneyManager.Instance.AddMoney(100);
             Die();
         }
     }
