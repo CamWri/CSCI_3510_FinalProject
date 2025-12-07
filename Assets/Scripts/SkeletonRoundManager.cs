@@ -22,7 +22,7 @@ public class SkeletonRoundManager : MonoBehaviour
     public void startEnemySpawning(List<EnemySpawnPoints> enemySpawnPositionList)
     {
         allEnemySpawnPoints = enemySpawnPositionList;
-        HUDController.instance.UpdateRoundText(round.ToString());
+        HUDController.Instance.UpdateRoundText(round.ToString());
         StartCoroutine(StartNextRound());
     }
 
@@ -75,7 +75,7 @@ public class SkeletonRoundManager : MonoBehaviour
         {
             roundActive = false;
             round++;
-            HUDController.instance.UpdateRoundText(round.ToString());
+            HUDController.Instance.UpdateRoundText(round.ToString());
 
             Debug.Log($"Starting round {round}");
             StartCoroutine(StartNextRound());

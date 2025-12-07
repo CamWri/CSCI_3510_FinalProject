@@ -28,6 +28,7 @@ public class FloorManager : MonoBehaviour
     {
         currentFloor++;
         Debug.Log("Floor: " + currentFloor);
+        HUDController.Instance.UpdateFloorText(currentFloor.ToString());
     }
 
     /// <summary>
