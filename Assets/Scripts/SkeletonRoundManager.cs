@@ -22,7 +22,7 @@ public class SkeletonRoundManager : MonoBehaviour
     public void startEnemySpawning(List<EnemySpawnPoints> enemySpawnPositionList)
     {
         allEnemySpawnPoints = enemySpawnPositionList;
-        HUDController.Instance.UpdateRoundText(round.ToString());
+        HUDController.Instance.UpdateRoundText(round);
         StartCoroutine(StartNextRound());
     }
 
@@ -68,6 +68,8 @@ public class SkeletonRoundManager : MonoBehaviour
     {
         skeletonsAlive--;
 
+        HUDController.Instance.SkeletonKilled();
+
         Debug.Log($"Skeleton killed. Alive: {skeletonsAlive}");
 
         // When all skeletons that were spawned are dead → new round
@@ -75,7 +77,7 @@ public class SkeletonRoundManager : MonoBehaviour
         {
             roundActive = false;
             round++;
-            HUDController.Instance.UpdateRoundText(round.ToString());
+            HUDController.Instance.UpdateRoundText(round);
 
             Debug.Log($"Starting round {round}");
             StartCoroutine(StartNextRound());

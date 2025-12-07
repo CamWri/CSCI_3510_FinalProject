@@ -77,6 +77,13 @@ public class Skeleton : MonoBehaviour
     {
         if (isDead || isSpawning || player == null) return;
 
+        // Always rotate toward the player when attacking
+        if (isAttacking)
+        {
+            FacePlayer();
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, player.position);
 
         if (distance > attackRange)
@@ -164,8 +171,8 @@ public class Skeleton : MonoBehaviour
         isAttacking = true;
 
         // --- DAMAGE WINDOW SETTINGS ---
-        float damageStart = 0.3f;   // when damage begins
-        float damageEnd = 0.6f;     // when damage ends
+        float damageStart = 0.4f;   // when damage begins
+        float damageEnd = 0.9f;     // when damage ends
         // ------------------------------
 
         // Wait until damage start moment
@@ -252,6 +259,22 @@ public class Skeleton : MonoBehaviour
             {
                 health.TakeDamage(damage);
             }
+        }
+    }
+
+    void FacePlayer()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0; // keep only horizontal rotation
+
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * 8f // rotation speed
+            );
         }
     }
 }

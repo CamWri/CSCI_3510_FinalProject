@@ -20,9 +20,8 @@ public class PlayerMoneyManager : MonoBehaviour
 
     private void Start()
     {
-        // Safe: HUDController.Instance should exist by now
         if (HUDController.Instance != null)
-            HUDController.Instance.UpdateMoneyText(moneyCount.ToString());
+            AddMoney(moneyCount);
         else
             Debug.LogWarning("HUDController.Instance not found!");
     }
@@ -30,7 +29,7 @@ public class PlayerMoneyManager : MonoBehaviour
     public void AddMoney(int amount)
     {
         moneyCount += amount;
-        HUDController.Instance.UpdateMoneyText(moneyCount.ToString());
+        HUDController.Instance.UpdateMoneyText(moneyCount, amount, true);
     }
 
     // Returns true if money was successfully spent
@@ -39,7 +38,7 @@ public class PlayerMoneyManager : MonoBehaviour
         if (moneyCount >= amount)
         {
             moneyCount -= amount;
-            HUDController.Instance.UpdateMoneyText(moneyCount.ToString());
+            HUDController.Instance.UpdateMoneyText(moneyCount, amount,  false);
             return true;
         }
         return false;

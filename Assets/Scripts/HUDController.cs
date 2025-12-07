@@ -1,14 +1,29 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class HUDController : MonoBehaviour
 {
     public static HUDController Instance;
 
+    private int totalMoneyCount;
+    private int totalRounds;
+    private int totalSkeletonsKilled;
+
+    //Durring Game Text
+    [SerializeField] GameObject InGameStatsPanel;
     [SerializeField] TMP_Text interactionText;
     [SerializeField] TMP_Text roundText;
     [SerializeField] TMP_Text floorText;
     [SerializeField] TMP_Text moneyText;
+
+    //Stats Sheet Text
+    [SerializeField] GameObject EndOfGameStatsPanel;
+    [SerializeField] TMP_Text TotalMoneyEarnedText;
+    [SerializeField] TMP_Text TotalRoundsSurvivedText;
+    [SerializeField] TMP_Text TotalFloorsSurvivedText;
+    [SerializeField] TMP_Text TotalSkeletonsKilledText;
 
     private void Awake()
     {
@@ -22,18 +37,11 @@ public class HUDController : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        EndOfGameStatsPanel.SetActive(false);
+
         // Hide interaction text initially
         if (interactionText != null)
             interactionText.gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
-        if (FloorManager.Instance != null)
-            UpdateFloorText(FloorManager.Instance.currentFloor.ToString());
-
-        if (PlayerMoneyManager.Instance != null)
-            UpdateMoneyText(PlayerMoneyManager.Instance.moneyCount.ToString());
     }
 
     // Interaction text
@@ -53,21 +61,66 @@ public class HUDController : MonoBehaviour
     }
 
     // HUD updates
-    public void UpdateFloorText(string text)
+    public void UpdateFloorText(int FloorNumber)
     {
         if (floorText != null)
-            floorText.text = "FLOOR: " + text;
+            floorText.text = "FLOOR: " + FloorNumber.ToString();
     }
 
-    public void UpdateRoundText(string text)
+    public void UpdateRoundText(int RoundNumber)
     {
         if (roundText != null)
-            roundText.text = "ROUND: " + text;
+            totalRounds += 1;
+            roundText.text = "ROUND: " + RoundNumber.ToString();
     }
 
-    public void UpdateMoneyText(string text)
+    public void UpdateMoneyText(int NewMoneyTotal, int moneyChange, bool isIncrease)
     {
         if (moneyText != null)
-            moneyText.text = "$" + text;
+            if(isIncrease)
+                totalMoneyCount += moneyChange;
+            moneyText.text = "$" + NewMoneyTotal.ToString();
+    }
+
+    public void SkeletonKilled()
+    {
+        totalSkeletonsKilled += 1;
+    }
+
+    public void ReturnToMainMenuAfterDelay(float delaySeconds)
+    {
+        StartCoroutine(ReturnToMainMenuRoutine(delaySeconds));
+    }
+
+    private IEnumerator ReturnToMainMenuRoutine(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+
+        // Unfreeze before changing scenes
+        Time.timeScale = 1f;
+
+        DDOLCleaner.CleanDDOL();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadScene("StartScene");
+    }
+
+    public void DeathUI()
+    {
+        TotalMoneyEarnedText.text = "Total Money Earned: $" + totalMoneyCount.ToString();
+        TotalRoundsSurvivedText.text = "Total Rounds Survived is " + totalRounds.ToString();
+        TotalSkeletonsKilledText.text = "Total Skeletons Killed is " + totalSkeletonsKilled.ToString();
+        TotalFloorsSurvivedText.text = "Total Floors Visited is " + FloorManager.Instance.currentFloor.ToString();
+
+        InGameStatsPanel.SetActive(false);
+        EndOfGameStatsPanel.SetActive(true);
+
+        // Freeze gameplay
+        Time.timeScale = 0f;
+
+        // Go back to main menu after 10 seconds of REAL TIME
+        ReturnToMainMenuAfterDelay(10f);
     }
 }

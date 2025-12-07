@@ -3,11 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class DDOLCleaner : MonoBehaviour
 {
-    private void Awake()
-    {
-        CleanDDOL();
-    }
-
     public static void CleanDDOL()
     {
         // Create a dummy to find the DDOL scene

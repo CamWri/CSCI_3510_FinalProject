@@ -14,6 +14,7 @@ public class FloorManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);  // Persist across scenes
+            HUDController.Instance.UpdateFloorText(currentFloor);
         }
         else
         {
@@ -28,7 +29,7 @@ public class FloorManager : MonoBehaviour
     {
         currentFloor++;
         Debug.Log("Floor: " + currentFloor);
-        HUDController.Instance.UpdateFloorText(currentFloor.ToString());
+        HUDController.Instance.UpdateFloorText(currentFloor);
     }
 
     /// <summary>
