@@ -18,6 +18,11 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    void Start()
+    {
+        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
+    }
+
     /// <summary>
     /// Apply damage to the player
     /// </summary>
@@ -28,6 +33,9 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
+
+        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
 
         Debug.Log($"{gameObject.name} took {amount} damage. Current health: {currentHealth}");
 
@@ -50,8 +58,20 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
+        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
 
         Debug.Log($"{gameObject.name} healed {amount}. Current health: {currentHealth}");
+    }
+
+    public void IncreaseMaxHP(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
+
+        maxHealth += amount;
+        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
     }
 
     /// <summary>
@@ -61,23 +81,13 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} has died.");
         onDeath?.Invoke();
-
-        // Example: disable player movement & visuals (optional)
-        // GetComponent<PlayerMovement>()?.enabled = false;
-        // GetComponent<Renderer>().enabled = false;
     }
 
-    /// <summary>
-    /// Returns current health
-    /// </summary>
     public float GetHealth()
     {
         return currentHealth;
     }
 
-    /// <summary>
-    /// Returns health as a percentage (0 to 1)
-    /// </summary>
     public float GetHealthPercent()
     {
         return currentHealth / maxHealth;

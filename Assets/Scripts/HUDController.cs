@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
 {
@@ -11,13 +12,22 @@ public class HUDController : MonoBehaviour
     private int totalRounds;
     private int totalSkeletonsKilled;
 
+    [Header("In Game UI")]
     //Durring Game Text
     [SerializeField] GameObject InGameStatsPanel;
     [SerializeField] TMP_Text interactionText;
     [SerializeField] TMP_Text roundText;
     [SerializeField] TMP_Text floorText;
     [SerializeField] TMP_Text moneyText;
+    [SerializeField] TMP_Text weaponAmmoText;
 
+
+    [Header("Healthbar")]
+    [SerializeField] Slider healthBarSlider;
+    [SerializeField] TMP_Text healthBarValueText;
+
+
+    [Header("End Of Game UI")]
     //Stats Sheet Text
     [SerializeField] GameObject EndOfGameStatsPanel;
     [SerializeField] TMP_Text TotalMoneyEarnedText;
@@ -122,5 +132,18 @@ public class HUDController : MonoBehaviour
 
         // Go back to main menu after 10 seconds of REAL TIME
         ReturnToMainMenuAfterDelay(10f);
+    }
+
+    public void UpdateHealthBar(float currentHP, float maxHP)
+    {
+        healthBarValueText.text = currentHP.ToString() + "/" + maxHP.ToString();
+
+        healthBarSlider.value = currentHP;
+        healthBarSlider.maxValue = maxHP;
+    }
+
+    public void UpdateWeaponText(int amount)
+    {
+        weaponAmmoText.text = amount.ToString();
     }
 }

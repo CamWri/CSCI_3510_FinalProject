@@ -180,7 +180,7 @@ MonoBehaviour:
   swordHitbox: {fileID: 6996800194712837587}
   walkSpeed: 3.5
   speedRandomness: 0.5
-  attackRange: 2.5
+  attackRange: 3
   spawnDuration: 2
   deathDuration: 3
   health: 15

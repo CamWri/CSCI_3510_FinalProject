@@ -27,6 +27,7 @@ public class Skeleton : MonoBehaviour
     bool isSpawning = true;
     bool isDead = false;
     bool isAttacking = false;
+    bool hasDealtDamageThisAttack = false;
 
     float attackAnimationLength;
 
@@ -169,6 +170,7 @@ public class Skeleton : MonoBehaviour
     IEnumerator AttackRoutine()
     {
         isAttacking = true;
+        hasDealtDamageThisAttack = false;
 
         // --- DAMAGE WINDOW SETTINGS ---
         float damageStart = 0.4f;   // when damage begins
@@ -243,6 +245,7 @@ public class Skeleton : MonoBehaviour
     public void DealSwordDamage()
     {
         if (!isAttacking) return; // ensure mid-attack
+        if (hasDealtDamageThisAttack) return;
 
         float hitRadius = 0.8f;     // tune based on sword size
         float hitDistance = 2f;     // reach of the attack
@@ -258,6 +261,7 @@ public class Skeleton : MonoBehaviour
             if (health != null)
             {
                 health.TakeDamage(damage);
+                hasDealtDamageThisAttack = true;
             }
         }
     }

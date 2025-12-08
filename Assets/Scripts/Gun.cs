@@ -43,6 +43,7 @@ public class Gun : MonoBehaviour
         reloadMovementTime = reloadTime/4f;
         audioSource = GetComponent<AudioSource>();
         reloading = false;
+        HUDController.Instance.UpdateWeaponText(currentAmmo);
     }
     private void Update()
     {
@@ -100,6 +101,7 @@ public class Gun : MonoBehaviour
         playerCam.ApplyRecoil(maxRecoil, recoilAmount, recoilSpeed);
 
         currentAmmo -= 1;
+        HUDController.Instance.UpdateWeaponText(currentAmmo);
         Debug.Log("Current ammo: " + currentAmmo);
         RaycastHit hit;
 
@@ -124,6 +126,9 @@ public class Gun : MonoBehaviour
     void Reload()
     {
         currentAmmo = ammo;
+
+        HUDController.Instance.UpdateWeaponText(currentAmmo);
+
         reloading = true;
         reloadStartTime = Time.time;
         audioSource.PlayOneShot(reloadSound, 0.7f);
