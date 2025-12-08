@@ -799,6 +799,7 @@ MonoBehaviour:
   - {fileID: 8568166582544265178}
   generationOrder: 0
   markForDelete: 0
+  wallBuyLocations: []
 --- !u!65 &7342604498630317230
 BoxCollider:
   m_ObjectHideFlags: 0

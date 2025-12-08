@@ -3,13 +3,20 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [Header("Weapon Identity")]
+    public WeaponType weaponType;
+    public WeaponRarity rarity;
+
+    [Header("Stats Database")]
+    public WeaponStatsDatabase database;
+
     [Header("Gun Data")]
-    public float range = 100f;
-    public float fireRate = 1.0f;
-    public float damage = 30f;
-    public int ammo = 30;
-    public float reloadTime = 1f;
     public bool isAuto = false;
+    private float range;
+    private float fireRate;
+    private float damage;
+    private int ammo;
+    private float reloadTime;
 
     private float nextTimeToFire;
     float reloadStartTime;
@@ -25,6 +32,7 @@ public class Gun : MonoBehaviour
     bool shootAnimation;
     float shootAnimationStartTime;
     Vector3 currentPosition;
+
     [Header("Gun Recoil")]
     public float recoilAmount;
     public Vector2 maxRecoil;
@@ -37,6 +45,8 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
+        ApplyStats();
+
         fpsCamera = GameObject.Find("CameraHolder/Main Camera").GetComponent<Camera>();
         nextTimeToFire = 0.0f;
         currentAmmo = ammo;
@@ -72,7 +82,6 @@ public class Gun : MonoBehaviour
             {
                 currentAmmo = ammo;
                 reloading = false;
-                Debug.Log("Reload Done");
             }
         }
         if (shootAnimation)
@@ -102,17 +111,15 @@ public class Gun : MonoBehaviour
 
         currentAmmo -= 1;
         HUDController.Instance.UpdateWeaponText(currentAmmo);
-        Debug.Log("Current ammo: " + currentAmmo);
         RaycastHit hit;
 
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            Debug.Log("Ray hit: " + hit.collider.name + " (gameObject: " + hit.collider.gameObject.name + ")");
             // Try to damage skeleton
             Skeleton skeleton = hit.transform.GetComponent<Skeleton>();
             if (skeleton != null)
             {
-                Debug.Log("Shot at a skeleton");
+                Debug.Log("Shot at a skeleton and dealt" + damage.ToString() + "damage.");
                 skeleton.TakeDamage(damage);
                 PlayerMoneyManager.Instance.AddMoney(10);
             }
@@ -133,7 +140,26 @@ public class Gun : MonoBehaviour
         reloadStartTime = Time.time;
         audioSource.PlayOneShot(reloadSound, 0.7f);
 
-        Debug.Log("Reloading....");
         nextTimeToFire = Time.time + reloadTime;
+    }
+
+    public void ApplyStats()
+    {
+        damage = database.GetDamage(weaponType, rarity);
+        ammo = database.GetAmmo(weaponType, rarity);
+        fireRate = database.GetFireRate(weaponType, rarity);
+        range = database.GetRange(weaponType, rarity);
+        reloadTime = database.GetReloadTime(weaponType, rarity);
+    }
+
+
+    public void UpgradeWeapon()
+    {
+        if (rarity == WeaponRarity.Legendary)
+            return;
+
+        rarity++;
+        ApplyStats();
+        HUDController.Instance.UpdateWeaponText(currentAmmo);
     }
 }

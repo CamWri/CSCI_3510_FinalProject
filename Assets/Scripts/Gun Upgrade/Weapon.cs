@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Setup")]
+    /*[Header("Setup")]
     public WeaponType weaponType;
     public WeaponRarity currentRarity = WeaponRarity.Base;
     public WeaponStatsDatabase statsDatabase;
@@ -68,5 +68,5 @@ public class Weapon : MonoBehaviour
 
         currentAmmoInMag -= amount;
         return true;
-    }
+    }*/
 }

@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallBuy
   weaponType: 3
-  weaponCost: 2500
+  baseWeaponCost: 1500
+  interactable: {fileID: 6567793472058354097}
 --- !u!114 &6567793472058354097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +68,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2356326507471770361}
         m_TargetAssemblyTypeName: WallBuy, Assembly-CSharp
-        m_MethodName: SwitchToPurchasedWeapon
+        m_MethodName: SwitchOrUpgradeWeapon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

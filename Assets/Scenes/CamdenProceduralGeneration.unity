@@ -498,9 +498,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4153645970159991079, guid: f563f6f500d7dd3458bbe59953c30e1d, type: 3}
+      propertyPath: database
+      value: 
+      objectReference: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
+    - target: {fileID: 4153645970159991079, guid: f563f6f500d7dd3458bbe59953c30e1d, type: 3}
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 453633790}
+    - target: {fileID: 4153645970159991079, guid: f563f6f500d7dd3458bbe59953c30e1d, type: 3}
+      propertyPath: lineRenderer
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -568,9 +576,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2251083688610384066, guid: 8178babebc0143a4fa8ffda23ff7932d, type: 3}
+      propertyPath: database
+      value: 
+      objectReference: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
+    - target: {fileID: 2251083688610384066, guid: 8178babebc0143a4fa8ffda23ff7932d, type: 3}
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 453633790}
+    - target: {fileID: 2251083688610384066, guid: 8178babebc0143a4fa8ffda23ff7932d, type: 3}
+      propertyPath: weaponType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1851,8 +1867,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunSwap
   guns:
   - {fileID: 943273583}
-  - {fileID: 1684420128}
   - {fileID: 1107330696}
+  - {fileID: 1684420128}
   - {fileID: 1376108925}
 --- !u!114 &1044544902
 MonoBehaviour:
@@ -1900,7 +1916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b9cf9be81c2da45ad868bd02647db4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMoneyManager
-  moneyCount: 3000
+  moneyCount: 100000
 --- !u!1 &1107330696 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1246608046841023207, guid: 8178babebc0143a4fa8ffda23ff7932d, type: 3}
@@ -2032,9 +2048,9 @@ MonoBehaviour:
   - {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   - {fileID: 3619385842440502987, guid: c8af26974f6dcb543913a0777c16abd7, type: 3}
   - {fileID: 3619385842440502987, guid: 4ecda5da3e6fc1e4d9ca15b5d62d326f, type: 3}
-  maxRooms: 2
+  maxRooms: 5
   maxAttempts: 500
-  wallBuyCount: 1
+  wallBuyCount: 3
   spawnedRooms: []
   unusedExits: []
   exitsUsed: []
@@ -2444,9 +2460,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 453633789}
     m_Modifications:
     - target: {fileID: 2351901246308719160, guid: e822ab43a17259e4d8109c990c941763, type: 3}
+      propertyPath: isAuto
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2351901246308719160, guid: e822ab43a17259e4d8109c990c941763, type: 3}
+      propertyPath: database
+      value: 
+      objectReference: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
+    - target: {fileID: 2351901246308719160, guid: e822ab43a17259e4d8109c990c941763, type: 3}
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 453633790}
+    - target: {fileID: 2351901246308719160, guid: e822ab43a17259e4d8109c990c941763, type: 3}
+      propertyPath: weaponType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2686084777564005333, guid: e822ab43a17259e4d8109c990c941763, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.2
@@ -2977,9 +3005,17 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5071420385753132967, guid: f222334fd4a01a14793c3549b9d65f08, type: 3}
+      propertyPath: database
+      value: 
+      objectReference: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
+    - target: {fileID: 5071420385753132967, guid: f222334fd4a01a14793c3549b9d65f08, type: 3}
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 453633790}
+    - target: {fileID: 5071420385753132967, guid: f222334fd4a01a14793c3549b9d65f08, type: 3}
+      propertyPath: weaponType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6835606387164879506, guid: f222334fd4a01a14793c3549b9d65f08, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.15

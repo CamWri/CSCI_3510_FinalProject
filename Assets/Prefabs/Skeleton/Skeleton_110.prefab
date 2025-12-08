@@ -183,7 +183,7 @@ MonoBehaviour:
   attackRange: 3
   spawnDuration: 2
   deathDuration: 3
-  health: 15
+  health: 10
   damage: 1
 --- !u!136 &3887406802063963188
 CapsuleCollider:

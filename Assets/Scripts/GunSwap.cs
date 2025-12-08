@@ -2,22 +2,25 @@ using UnityEngine;
 
 public class GunSwap : MonoBehaviour
 {
-    public GameObject[] guns;
-    private int currentGunIndex = 0;
+    public GameObject[] guns;  // must match enum order
+
+    private WeaponType currentGunType = WeaponType.Pistol;
+    private GameObject currentGun;      // store the actual gun instance
+    private Gun currentGunScript;       // optional: store the gun logic component
 
     private void Awake()
     {
-        // Enable only the first gun
-        for (int i = 0; i < guns.Length; i++)
-        {
-            if (guns[i] != null)
-                guns[i].SetActive(i == currentGunIndex);
-        }
+        EquipGun(currentGunType);
     }
 
-    public void SelectGun(int index)
+    public void SelectGun(WeaponType type)
     {
-        if (index < 0 || index >= guns.Length) return;
+        EquipGun(type);
+    }
+
+    private void EquipGun(WeaponType type)
+    {
+        int index = (int)type;
 
         for (int i = 0; i < guns.Length; i++)
         {
@@ -25,28 +28,23 @@ public class GunSwap : MonoBehaviour
                 guns[i].SetActive(i == index);
         }
 
-        currentGunIndex = index;
-        Debug.Log("Gun selected: " + index);
+        currentGunType = type;
+        currentGun = guns[index];
+
+        currentGunScript = currentGun.GetComponent<Gun>(); // optional
+        Debug.Log("Equipped gun: " + type);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SelectGun(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SelectGun(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SelectGun(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SelectGun(3);
-        }
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectGun(WeaponType.Pistol);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectGun(WeaponType.AR);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SelectGun(WeaponType.SMG);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) SelectGun(WeaponType.Shotgun);
+    }
+
+    public Gun GetCurrentGunScript()
+    {
+        return currentGunScript;
     }
 }

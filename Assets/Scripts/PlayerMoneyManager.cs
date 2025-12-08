@@ -21,7 +21,7 @@ public class PlayerMoneyManager : MonoBehaviour
     private void Start()
     {
         if (HUDController.Instance != null)
-            AddMoney(moneyCount);
+            AddMoney(0);
         else
             Debug.LogWarning("HUDController.Instance not found!");
     }
