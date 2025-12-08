@@ -3,8 +3,7 @@ using UnityEngine;
 public class GunSwap : MonoBehaviour
 {
     public GameObject[] guns;  // must match enum order
-
-    private WeaponType currentGunType = WeaponType.Pistol;
+    public WeaponType currentGunType = WeaponType.Pistol;
     private GameObject currentGun;      // store the actual gun instance
     private Gun currentGunScript;       // optional: store the gun logic component
 

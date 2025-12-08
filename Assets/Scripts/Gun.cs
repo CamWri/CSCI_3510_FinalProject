@@ -122,6 +122,9 @@ public class Gun : MonoBehaviour
                 Debug.Log("Shot at a skeleton and dealt" + damage.ToString() + "damage.");
                 skeleton.TakeDamage(damage);
                 PlayerMoneyManager.Instance.AddMoney(10);
+
+                if (HUDController.Instance != null)
+                    HUDController.Instance.ShowHitMarker();
             }
         }
 

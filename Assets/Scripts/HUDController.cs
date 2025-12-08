@@ -35,6 +35,10 @@ public class HUDController : MonoBehaviour
     [SerializeField] TMP_Text TotalFloorsSurvivedText;
     [SerializeField] TMP_Text TotalSkeletonsKilledText;
 
+    [Header("Hit Marker")]
+    [SerializeField] GameObject hitMarker;  // assign in inspector
+    [SerializeField] float hitMarkerDuration = 0.2f; // how long it shows
+
     private void Awake()
     {
         // Singleton pattern
@@ -48,6 +52,7 @@ public class HUDController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         EndOfGameStatsPanel.SetActive(false);
+        hitMarker.SetActive(false);
 
         // Hide interaction text initially
         if (interactionText != null)
@@ -145,5 +150,25 @@ public class HUDController : MonoBehaviour
     public void UpdateWeaponText(int amount)
     {
         weaponAmmoText.text = amount.ToString();
+    }
+
+    private Coroutine hitMarkerRoutine;
+
+    public void ShowHitMarker()
+    {
+        if (hitMarker == null) return;
+
+        // Stop previous coroutine if already running
+        if (hitMarkerRoutine != null)
+            StopCoroutine(hitMarkerRoutine);
+
+        hitMarker.SetActive(true);
+        hitMarkerRoutine = StartCoroutine(HideHitMarkerAfterDelay());
+    }
+
+    private IEnumerator HideHitMarkerAfterDelay()
+    {
+        yield return new WaitForSeconds(hitMarkerDuration);
+        hitMarker.SetActive(false);
     }
 }
