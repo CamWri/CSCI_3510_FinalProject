@@ -7,15 +7,21 @@ public class PlayerHealth : MonoBehaviour
     public float maxHealth = 100f;
     public bool invincible = false;
 
+    [Header("Regeneration Settings")]
+    public float regenDelay = 3f;       // Seconds to wait after last damage
+    public float regenRate = 10f;       // Health per second
+
     [Header("Events")]
     public UnityEvent onTakeDamage;
     public UnityEvent onDeath;
 
     private float currentHealth;
+    private float lastDamageTime;
 
     void Awake()
     {
         currentHealth = maxHealth;
+        lastDamageTime = -regenDelay; // ensures regen can start immediately if needed
     }
 
     void Start()
@@ -23,10 +29,14 @@ public class PlayerHealth : MonoBehaviour
         HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
     }
 
+    void Update()
+    {
+        HandleRegeneration();
+    }
+
     /// <summary>
     /// Apply damage to the player
     /// </summary>
-    /// <param name="amount">Amount of damage to take</param>
     public void TakeDamage(float amount)
     {
         if (invincible || currentHealth <= 0f) return;
@@ -36,22 +46,20 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
 
         HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
-
         Debug.Log($"{gameObject.name} took {amount} damage. Current health: {currentHealth}");
 
-        // Trigger any events (like UI update or sound)
+        // Reset regeneration timer
+        lastDamageTime = Time.time;
+
         onTakeDamage?.Invoke();
 
         if (currentHealth <= 0f)
-        {
             Die();
-        }
     }
 
     /// <summary>
-    /// Heal the player
+    /// Heal the player by a fixed amount
     /// </summary>
-    /// <param name="amount">Amount of healing</param>
     public void Heal(float amount)
     {
         if (currentHealth <= 0f) return;
@@ -59,19 +67,40 @@ public class PlayerHealth : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
         currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
-        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
 
+        HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
         Debug.Log($"{gameObject.name} healed {amount}. Current health: {currentHealth}");
     }
 
+    /// <summary>
+    /// Increase max health
+    /// </summary>
     public void IncreaseMaxHP(float amount)
     {
+        maxHealth += amount;
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
         currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
 
-        maxHealth += amount;
         HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
+    }
+
+    /// <summary>
+    /// Handles smooth regeneration over time after regenDelay
+    /// </summary>
+    private void HandleRegeneration()
+    {
+        if (currentHealth <= 0f || currentHealth >= maxHealth) return;
+
+        if (Time.time - lastDamageTime >= regenDelay)
+        {
+            float healThisFrame = regenRate * Time.deltaTime;
+            currentHealth += healThisFrame;
+            currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+            currentHealth = Mathf.Round(currentHealth * 10f) / 10f;
+
+            HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
+        }
     }
 
     /// <summary>
@@ -83,13 +112,13 @@ public class PlayerHealth : MonoBehaviour
         onDeath?.Invoke();
     }
 
-    public float GetHealth()
-    {
-        return currentHealth;
-    }
+    /// <summary>
+    /// Returns current health value
+    /// </summary>
+    public float GetHealth() => currentHealth;
 
-    public float GetHealthPercent()
-    {
-        return currentHealth / maxHealth;
-    }
+    /// <summary>
+    /// Returns current health as percentage (0-1)
+    /// </summary>
+    public float GetHealthPercent() => currentHealth / maxHealth;
 }
