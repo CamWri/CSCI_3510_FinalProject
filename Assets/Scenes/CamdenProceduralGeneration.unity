@@ -1868,6 +1868,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 10
   invincible: 0
+  regenDelay: 8
+  regenRate: 0.1
   onTakeDamage:
     m_PersistentCalls:
       m_Calls: []
