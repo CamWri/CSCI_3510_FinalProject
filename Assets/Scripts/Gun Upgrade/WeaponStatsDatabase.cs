@@ -1,77 +1,71 @@
 using UnityEngine;
 
 [System.Serializable]
-public class WeaponStatBlock
+public class WeaponTypeStats
 {
+    [Header("Which Weapon Type?")]
     public WeaponType weaponType;
 
-    [Header("Base (Starter)")]
-    public int baseDamage = 10;
-    public int baseAmmo = 10;
+    [Header("Base")]
+    public int baseAmmo = 60;
+    public float baseDamage = 10f;
 
     [Header("Common")]
-    public int commonDamage = 15;
-    public int commonAmmo = 12;
+    public int commonAmmo = 70;
+    public float commonDamage = 12f;
 
     [Header("Rare")]
-    public int rareDamage = 20;
-    public int rareAmmo = 14;
+    public int rareAmmo = 80;
+    public float rareDamage = 14f;
 
     [Header("Epic")]
-    public int epicDamage = 25;
-    public int epicAmmo = 16;
+    public int epicAmmo = 90;
+    public float epicDamage = 17f;
 
     [Header("Legendary")]
-    public int legendaryDamage = 30;
-    public int legendaryAmmo = 18;
+    public int legendaryAmmo = 100;
+    public float legendaryDamage = 20f;
 }
 
 [CreateAssetMenu(fileName = "WeaponStatsDatabase", menuName = "Weapons/Weapon Stats Database")]
 public class WeaponStatsDatabase : ScriptableObject
 {
-    public WeaponStatBlock[] weaponStats;
+    [Tooltip("One entry per weapon type (Pistol, SMG, AR, MG).")]
+    public WeaponTypeStats[] weaponTypeStats;
 
-    public WeaponStatBlock GetStatsFor(WeaponType type)
+    public WeaponTypeStats GetStatsForType(WeaponType type)
     {
-        foreach (var block in weaponStats)
+        if (weaponTypeStats == null) return null;
+
+        foreach (var s in weaponTypeStats)
         {
-            if (block.weaponType == type)
-                return block;
+            if (s != null && s.weaponType == type)
+                return s;
         }
 
-        Debug.LogWarning($"WeaponStatsDatabase: No stats found for weapon type {type}");
+        Debug.LogWarning($"[WeaponStatsDatabase] No stats found for weapon type: {type}");
         return null;
     }
 
-    public int GetDamage(WeaponType type, WeaponRarity rarity)
+    public (int ammo, float damage) GetStats(WeaponType type, WeaponRarity rarity)
     {
-        var stats = GetStatsFor(type);
-        if (stats == null) return 0;
+        var s = GetStatsForType(type);
+        if (s == null) return (0, 0f);
 
         switch (rarity)
         {
-            case WeaponRarity.Base: return stats.baseDamage;
-            case WeaponRarity.Common: return stats.commonDamage;
-            case WeaponRarity.Rare: return stats.rareDamage;
-            case WeaponRarity.Epic: return stats.epicDamage;
-            case WeaponRarity.Legendary: return stats.legendaryDamage;
-            default: return stats.baseDamage;
-        }
-    }
-
-    public int GetAmmo(WeaponType type, WeaponRarity rarity)
-    {
-        var stats = GetStatsFor(type);
-        if (stats == null) return 0;
-
-        switch (rarity)
-        {
-            case WeaponRarity.Base: return stats.baseAmmo;
-            case WeaponRarity.Common: return stats.commonAmmo;
-            case WeaponRarity.Rare: return stats.rareAmmo;
-            case WeaponRarity.Epic: return stats.epicAmmo;
-            case WeaponRarity.Legendary: return stats.legendaryAmmo;
-            default: return stats.baseAmmo;
+            case WeaponRarity.Base:
+                return (s.baseAmmo, s.baseDamage);
+            case WeaponRarity.Common:
+                return (s.commonAmmo, s.commonDamage);
+            case WeaponRarity.Rare:
+                return (s.rareAmmo, s.rareDamage);
+            case WeaponRarity.Epic:
+                return (s.epicAmmo, s.epicDamage);
+            case WeaponRarity.Legendary:
+                return (s.legendaryAmmo, s.legendaryDamage);
+            default:
+                return (s.baseAmmo, s.baseDamage);
         }
     }
 }

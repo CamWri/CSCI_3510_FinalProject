@@ -2,43 +2,39 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Setup")]
+    [Header("Identity")]
     public WeaponType weaponType;
     public WeaponRarity currentRarity = WeaponRarity.Base;
+
+    [Header("Runtime Stats (auto-filled from database)")]
+    public int currentAmmo;
+    public float currentDamage;
+
+    [Header("Config")]
     public WeaponStatsDatabase statsDatabase;
 
-    [Header("Runtime Stats (read-only)")]
-    [SerializeField] private int currentDamage;
-    [SerializeField] private int currentMagSize;
-    [SerializeField] private int currentAmmoInMag;
-
-    public int CurrentDamage => currentDamage;
-    public int CurrentMagSize => currentMagSize;
-    public int CurrentAmmoInMag => currentAmmoInMag;
-
-    private void Awake()
+    private void Start()
     {
-        ApplyStats();
+        ApplyStatsFromDatabase();
     }
 
     /// <summary>
-    /// Pulls damage & ammo from the WeaponStatsDatabase based on weapon type + rarity.
+    /// Pulls ammo and damage for this weapon's type + rarity.
+    /// Call this after changing rarity (e.g., upgrades).
     /// </summary>
-    public void ApplyStats()
+    public void ApplyStatsFromDatabase()
     {
         if (statsDatabase == null)
         {
-            Debug.LogError($"Weapon {name} has no WeaponStatsDatabase assigned!");
+            Debug.LogError($"[{name}] Weapon has no WeaponStatsDatabase assigned!");
             return;
         }
 
-        currentDamage = statsDatabase.GetDamage(weaponType, currentRarity);
-        currentMagSize = statsDatabase.GetAmmo(weaponType, currentRarity);
-        currentAmmoInMag = currentMagSize; // full mag on change
+        (currentAmmo, currentDamage) = statsDatabase.GetStats(weaponType, currentRarity);
     }
 
     /// <summary>
-    /// Move up exactly one rarity tier (up to Legendary).
+    /// Upgrade rarity by one step if not already Legendary.
     /// </summary>
     public void UpgradeRarity()
     {
@@ -46,27 +42,17 @@ public class Weapon : MonoBehaviour
             return;
 
         currentRarity++;
-        ApplyStats();
+        ApplyStatsFromDatabase();
     }
 
     /// <summary>
-    /// Refills the mag to max.
+    /// Refills ammo to the max for the current rarity.
     /// </summary>
-    public void RefillAmmo()
+    public void RefillAmmoToMax()
     {
-        currentAmmoInMag = currentMagSize;
-    }
+        if (statsDatabase == null) return;
 
-    /// <summary>
-    /// Try to spend ammo from mag (returns false if not enough).
-    /// Hook this into your shooting script.
-    /// </summary>
-    public bool ConsumeAmmo(int amount)
-    {
-        if (currentAmmoInMag < amount)
-            return false;
-
-        currentAmmoInMag -= amount;
-        return true;
+        (int maxAmmo, _) = statsDatabase.GetStats(weaponType, currentRarity);
+        currentAmmo = maxAmmo;
     }
 }
