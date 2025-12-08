@@ -30,7 +30,7 @@ public class WeaponTypeStats
 [CreateAssetMenu(fileName = "WeaponStatsDatabase", menuName = "Weapons/Weapon Stats Database")]
 public class WeaponStatsDatabase : ScriptableObject
 {
-    [Tooltip("One entry per weapon type (Pistol, SMG, AR, MG).")]
+    [Tooltip("One entry per weapon type (Pistol, SMG, AR, Shotgun).")]
     public WeaponTypeStats[] weaponTypeStats;
 
     public WeaponTypeStats GetStatsForType(WeaponType type)
@@ -54,18 +54,12 @@ public class WeaponStatsDatabase : ScriptableObject
 
         switch (rarity)
         {
-            case WeaponRarity.Base:
-                return (s.baseAmmo, s.baseDamage);
-            case WeaponRarity.Common:
-                return (s.commonAmmo, s.commonDamage);
-            case WeaponRarity.Rare:
-                return (s.rareAmmo, s.rareDamage);
-            case WeaponRarity.Epic:
-                return (s.epicAmmo, s.epicDamage);
-            case WeaponRarity.Legendary:
-                return (s.legendaryAmmo, s.legendaryDamage);
-            default:
-                return (s.baseAmmo, s.baseDamage);
+            case WeaponRarity.Base: return (s.baseAmmo, s.baseDamage);
+            case WeaponRarity.Common: return (s.commonAmmo, s.commonDamage);
+            case WeaponRarity.Rare: return (s.rareAmmo, s.rareDamage);
+            case WeaponRarity.Epic: return (s.epicAmmo, s.epicDamage);
+            case WeaponRarity.Legendary: return (s.legendaryAmmo, s.legendaryDamage);
+            default: return (s.baseAmmo, s.baseDamage);
         }
     }
 }

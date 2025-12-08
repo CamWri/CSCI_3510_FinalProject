@@ -5,5 +5,5 @@ public enum WeaponType
     Pistol,
     SMG,
     AR,
-    MG
+    Shotgun
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2356326507471770361}
   - component: {fileID: 6567793472058354097}
   - component: {fileID: 5075579730921185330}
+  - component: {fileID: -3896315697852906824}
   m_Layer: 0
   m_Name: WallBuyShotgun
   m_TagString: Interactable
@@ -49,6 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WallBuy
   weaponType: 3
   weaponCost: 2500
+  ammoCost: 500
+  upgradeCost: 1000
 --- !u!114 &6567793472058354097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,13 +64,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fca2f112c4aab4db2c3af26ce26408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  message: Buy A Shotgun For 2500
+  message: Buy Weapon for 2500
   onInteraction:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2356326507471770361}
         m_TargetAssemblyTypeName: WallBuy, Assembly-CSharp
         m_MethodName: SwitchToPurchasedWeapon
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  hasSecondaryInteraction: 1
+  secondaryMessage: Upgrade for 1000
+  onSecondaryInteraction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2356326507471770361}
+        m_TargetAssemblyTypeName: WallBuy, Assembly-CSharp
+        m_MethodName: UpgradePurchasedWeapon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -98,6 +118,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 2, z: 7}
   m_Center: {x: 0, y: 0, z: 1}
+--- !u!114 &-3896315697852906824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3627639619058072076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88af4a7549964554aa22d8ebd410ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  weaponType: 3
+  currentRarity: 0
+  currentAmmo: 0
+  currentDamage: 0
+  statsDatabase: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
 --- !u!1001 &6368435017941675312
 PrefabInstance:
   m_ObjectHideFlags: 0

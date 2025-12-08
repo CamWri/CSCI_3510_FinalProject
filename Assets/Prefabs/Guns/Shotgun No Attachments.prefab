@@ -5114,6 +5114,7 @@ GameObject:
   - component: {fileID: 2686084777564005333}
   - component: {fileID: 2351901246308719160}
   - component: {fileID: 8020284610124072875}
+  - component: {fileID: 6406111857190756963}
   m_Layer: 12
   m_Name: Shotgun No Attachments
   m_TagString: Untagged
@@ -5267,6 +5268,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6406111857190756963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050105396331009746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88af4a7549964554aa22d8ebd410ea0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  weaponType: 3
+  currentRarity: 0
+  currentAmmo: 0
+  currentDamage: 0
+  statsDatabase: {fileID: 11400000, guid: 258a688021def10489ba410eb4e01ff7, type: 2}
 --- !u!1 &3632585817219531682
 GameObject:
   m_ObjectHideFlags: 0
