@@ -49,10 +49,11 @@ public class HUDController : MonoBehaviour
     {
         if (interactionText != null)
         {
-            interactionText.text = text + " (F)";
+            interactionText.text = text;
             interactionText.gameObject.SetActive(true);
         }
     }
+
 
     public void DisableInteractionText()
     {

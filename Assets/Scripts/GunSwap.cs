@@ -29,6 +29,50 @@ public class GunSwap : MonoBehaviour
         Debug.Log("Gun selected: " + index);
     }
 
+    // -----------------------------
+    // NEW HELPERS FOR WALL BUY
+    // -----------------------------
+
+    /// <summary>
+    /// Returns the gun GameObject stored at the given index.
+    /// </summary>
+    public GameObject GetGunByIndex(int index)
+    {
+        if (guns == null || guns.Length == 0) return null;
+        if (index < 0 || index >= guns.Length) return null;
+
+        return guns[index];
+    }
+
+    /// <summary>
+    /// Returns the Weapon component on the gun at the index (if present).
+    /// </summary>
+    public Weapon GetWeaponComponentByIndex(int index)
+    {
+        GameObject gun = GetGunByIndex(index);
+        if (gun == null) return null;
+
+        return gun.GetComponent<Weapon>();
+    }
+
+    /// <summary>
+    /// Useful if you ever want "upgrade current gun" behavior.
+    /// </summary>
+    public int GetCurrentGunIndex()
+    {
+        return currentGunIndex;
+    }
+
+    public GameObject GetCurrentGun()
+    {
+        return GetGunByIndex(currentGunIndex);
+    }
+
+    public Weapon GetCurrentWeaponComponent()
+    {
+        return GetWeaponComponentByIndex(currentGunIndex);
+    }
+
     // Update is called once per frame
     void Update()
     {

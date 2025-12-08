@@ -3,20 +3,23 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    //Outline outline;
-    public string message;
-
+    [Header("Primary Interaction")]
+    public string message = "Interact";
     public UnityEvent onInteraction;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+
+    [Header("Secondary Interaction (Optional)")]
+    public bool hasSecondaryInteraction = false;
+    public string secondaryMessage = "Secondary Interact";
+    public UnityEvent onSecondaryInteraction;
 
     public void Interact()
     {
-        onInteraction.Invoke();
+        onInteraction?.Invoke();
     }
 
+    public void SecondaryInteract()
+    {
+        if (!hasSecondaryInteraction) return;
+        onSecondaryInteraction?.Invoke();
+    }
 }

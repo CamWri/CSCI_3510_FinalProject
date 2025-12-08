@@ -18,10 +18,6 @@ public class Weapon : MonoBehaviour
         ApplyStatsFromDatabase();
     }
 
-    /// <summary>
-    /// Pulls ammo and damage for this weapon's type + rarity.
-    /// Call this after changing rarity (e.g., upgrades).
-    /// </summary>
     public void ApplyStatsFromDatabase()
     {
         if (statsDatabase == null)
@@ -33,21 +29,19 @@ public class Weapon : MonoBehaviour
         (currentAmmo, currentDamage) = statsDatabase.GetStats(weaponType, currentRarity);
     }
 
-    /// <summary>
-    /// Upgrade rarity by one step if not already Legendary.
-    /// </summary>
+    public bool CanUpgrade()
+    {
+        return currentRarity < WeaponRarity.Legendary;
+    }
+
     public void UpgradeRarity()
     {
-        if (currentRarity == WeaponRarity.Legendary)
-            return;
+        if (!CanUpgrade()) return;
 
         currentRarity++;
         ApplyStatsFromDatabase();
     }
 
-    /// <summary>
-    /// Refills ammo to the max for the current rarity.
-    /// </summary>
     public void RefillAmmoToMax()
     {
         if (statsDatabase == null) return;
