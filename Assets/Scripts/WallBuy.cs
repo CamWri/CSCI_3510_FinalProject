@@ -28,7 +28,7 @@ public class WallBuy : MonoBehaviour
         if (gun.weaponType == weaponType)
         {
             int upgradeCost = GetUpgradeCost(gun.rarity);
-            interactable.message = $"Upgrade {weaponType} ({gun.rarity}) → ${upgradeCost}";
+            interactable.message = $"Upgrade {weaponType} ({gun.rarity})\n→ ${upgradeCost}";
         }
         else
         {
