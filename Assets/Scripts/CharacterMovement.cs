@@ -27,7 +27,8 @@ public class CharacterMovement : MonoBehaviour
     public CharacterController controller;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
-    public LayerMask groundMask;
+    public LayerMask groundMask;       // primary ground
+    public LayerMask extraGroundMask;  // secondary ground
     public Transform cameraTransform;
 
     public static CharacterMovement Instance;
@@ -46,7 +47,6 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
-
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -60,8 +60,11 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
-        // Ground check
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        // Ground check against both masks
+        bool groundedPrimary = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        bool groundedExtra   = Physics.CheckSphere(groundCheck.position, groundDistance, extraGroundMask);
+        isGrounded = groundedPrimary || groundedExtra;
+
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
 
@@ -72,18 +75,15 @@ public class CharacterMovement : MonoBehaviour
         // Camera-relative movement
         Vector3 forward = cameraTransform.forward;
         Vector3 right = cameraTransform.right;
-
-        // Ensure movement is horizontal
         forward.y = 0f;
         right.y = 0f;
-
         forward.Normalize();
         right.Normalize();
 
         Vector3 move = right * x + forward * z;
         move = Vector3.ClampMagnitude(move, 1f);
 
-        // Speed logic
+        // Speed & crouch
         if (Input.GetKey(KeyCode.C))
         {
             currentSpeed = crouchSpeed;
@@ -95,7 +95,7 @@ public class CharacterMovement : MonoBehaviour
             currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
         }
 
-        // Move player horizontally
+        // Move horizontally
         controller.Move(move * currentSpeed * Time.deltaTime);
 
         // Jumping

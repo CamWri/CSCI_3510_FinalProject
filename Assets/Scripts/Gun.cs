@@ -36,8 +36,6 @@ public class Gun : MonoBehaviour
     [Header("Gun Recoil")]
     public float recoilAmount;
     public Vector2 maxRecoil;
-    public float recoilSpeed;
-    public float resetRecoilSpeed;
 
     [Header("Camera Input Object")]
     public PlayerCam playerCam;
@@ -92,8 +90,6 @@ public class Gun : MonoBehaviour
                 shootAnimation = false;
             }
         }
-
-        playerCam.ResetRecoil(resetRecoilSpeed);
     }
 
     void Shoot()
@@ -103,28 +99,32 @@ public class Gun : MonoBehaviour
             muzzleFlash.Emit(1);
             muzzleFlash.Play();
         }
+
         if (audioSource != null && fireSound != null)
-        {
             audioSource.PlayOneShot(fireSound, 0.7f);
-        }
-        playerCam.ApplyRecoil(maxRecoil, recoilAmount, recoilSpeed);
+
+        // Add camera recoil
+        Vector2 recoil = new Vector2(
+            UnityEngine.Random.Range(-maxRecoil.x, maxRecoil.x) * recoilAmount,
+            UnityEngine.Random.Range(0f, maxRecoil.y) * recoilAmount
+        );
+
+
+        playerCam.AddRecoil(recoil);
 
         currentAmmo -= 1;
         HUDController.Instance.UpdateWeaponText(currentAmmo);
-        RaycastHit hit;
 
+        // Hit detection
+        RaycastHit hit;
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            // Try to damage skeleton
             Skeleton skeleton = hit.transform.GetComponent<Skeleton>();
             if (skeleton != null)
             {
-                Debug.Log("Shot at a skeleton and dealt" + damage.ToString() + "damage.");
                 skeleton.TakeDamage(damage);
                 PlayerMoneyManager.Instance.AddMoney(10);
-
-                if (HUDController.Instance != null)
-                    HUDController.Instance.ShowHitMarker();
+                HUDController.Instance.ShowHitMarker();
             }
         }
 

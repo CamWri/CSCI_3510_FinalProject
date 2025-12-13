@@ -6,6 +6,7 @@ public class SkeletonRoundManager : MonoBehaviour
 {
     [Header("Spawning Settings")]
     public GameObject skeletonPrefab;
+    public GameObject spawningParticleSystem;
 
     [Header("Round Settings")]
     public int startingSkeletons = 5;
@@ -45,6 +46,9 @@ public class SkeletonRoundManager : MonoBehaviour
         while (skeletonsToSpawn > 0)
         {
             Transform spawn = allEnemySpawnPoints[Random.Range(0, allEnemySpawnPoints.Count)].transform;
+
+            GameObject particleSystem = Instantiate(spawningParticleSystem, spawn.position, spawn.rotation);
+            Destroy(particleSystem, 2f);
 
             GameObject skeletonObj = Instantiate(skeletonPrefab, spawn.position, spawn.rotation);
 

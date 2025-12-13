@@ -16,28 +16,28 @@ MonoBehaviour:
   - weaponType: 0
     baseDamage: 2
     baseAmmo: 20
-    baseFireRate: 1.5
-    baseRange: 100
+    baseFireRate: 0.75
+    baseRange: 500
     baseReloadTime: 1
     commonDamage: 4
     commonAmmo: 25
-    commonFireRate: 1.5
-    commonRange: 100
+    commonFireRate: 0.5
+    commonRange: 500
     commonReloadTime: 1
     rareDamage: 8
     rareAmmo: 30
-    rareFireRate: 2
-    rareRange: 150
+    rareFireRate: 0.5
+    rareRange: 550
     rareReloadTime: 0.75
     epicDamage: 12
     epicAmmo: 35
-    epicFireRate: 2
-    epicRange: 200
+    epicFireRate: 0.5
+    epicRange: 600
     epicReloadTime: 0.75
     legendaryDamage: 50
     legendaryAmmo: 5
-    legendaryFireRate: 0.5
-    legendaryRange: 300
+    legendaryFireRate: 2
+    legendaryRange: 700
     legendaryReloadTime: 0.25
   - weaponType: 2
     baseDamage: 2
@@ -69,51 +69,51 @@ MonoBehaviour:
     baseDamage: 1.5
     baseAmmo: 60
     baseFireRate: 0.5
-    baseRange: 75
+    baseRange: 125
     baseReloadTime: 0.75
     commonDamage: 1.5
     commonAmmo: 75
     commonFireRate: 0.4
-    commonRange: 75
+    commonRange: 125
     commonReloadTime: 0.75
     rareDamage: 1.75
     rareAmmo: 75
     rareFireRate: 0.3
-    rareRange: 75
+    rareRange: 150
     rareReloadTime: 0.75
     epicDamage: 1.75
     epicAmmo: 90
     epicFireRate: 0.2
-    epicRange: 75
+    epicRange: 175
     epicReloadTime: 0.75
-    legendaryDamage: 2
+    legendaryDamage: 2.25
     legendaryAmmo: 100
     legendaryFireRate: 0.1
-    legendaryRange: 100
-    legendaryReloadTime: 0.5
+    legendaryRange: 200
+    legendaryReloadTime: 0.75
   - weaponType: 3
     baseDamage: 20
     baseAmmo: 5
-    baseFireRate: 5
-    baseRange: 100
+    baseFireRate: 3
+    baseRange: 300
     baseReloadTime: 3
     commonDamage: 40
     commonAmmo: 6
-    commonFireRate: 4
-    commonRange: 100
+    commonFireRate: 3
+    commonRange: 300
     commonReloadTime: 3
     rareDamage: 60
     rareAmmo: 7
-    rareFireRate: 3.5
-    rareRange: 100
+    rareFireRate: 3
+    rareRange: 300
     rareReloadTime: 3
     epicDamage: 80
     epicAmmo: 8
-    epicFireRate: 3.5
-    epicRange: 100
+    epicFireRate: 3
+    epicRange: 300
     epicReloadTime: 3
     legendaryDamage: 100
     legendaryAmmo: 10
-    legendaryFireRate: 3
-    legendaryRange: 100
+    legendaryFireRate: 2
+    legendaryRange: 300
     legendaryReloadTime: 3

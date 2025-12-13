@@ -31,16 +31,4 @@ public class Room : MonoBehaviour
     {
         return wallBuyLocations;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Room otherRoom = other.GetComponentInParent<Room>();
-        if (otherRoom == null) return;
-
-        // Only handle once per pair
-        if (generationOrder > otherRoom.generationOrder || generationOrder == 0)
-        {
-            markForDelete = true;
-        }
-    }
 }

@@ -2,51 +2,60 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    public float sensX = 400f;
+    public float sensY = 400f;
 
-    [Header("Recoil")]
-    private Vector3 targetRecoil = Vector3.zero;
-    private Vector3 currentRecoil = Vector3.zero;
+    [Header("Recoil (Auto Smoothed)")]
+    public Vector2 recoilOffset;       // Current recoil being applied
+    private Vector2 recoilVelocity;    // Used for smooth damping
+    public float recoilReturnSpeed = 8f;   // How fast recoil recenters
+    public float recoilApplySpeed = 18f;   // How fast recoil jumps on shot
 
     public Transform orientation;
 
-    float xRotation;
-    float yRotation;
+    private float xRotation;
+    private float yRotation;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    
-    private void Update() {
+
+    private void Update()
+    {
+        HandleLook();
+        ProcessRecoil();
+    }
+
+    private void HandleLook()
+    {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
         yRotation += mouseX;
-
         xRotation -= mouseY;
-
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(xRotation - currentRecoil.y, yRotation - currentRecoil.x, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        // Apply recoil offset here
+        transform.localRotation = Quaternion.Euler(xRotation - recoilOffset.y, yRotation - recoilOffset.x, 0f);
+        orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
-    public void ApplyRecoil(Vector3 maxRecoil, float recoilAmount, float recoilSpeed)
+    // Smoothly returns recoil to zero
+    private void ProcessRecoil()
     {
-        float recoilX = Random.Range(-maxRecoil.x, maxRecoil.x) * recoilAmount;
-        float recoilY = Random.Range(0, maxRecoil.y) * recoilAmount;
-
-        targetRecoil += new Vector3(recoilX, recoilY, 0);
-
-        currentRecoil = Vector3.MoveTowards(currentRecoil, targetRecoil, recoilSpeed);
+        recoilOffset = Vector2.SmoothDamp(
+            recoilOffset,
+            Vector2.zero,
+            ref recoilVelocity,
+            1f / recoilReturnSpeed
+        );
     }
 
-    public void ResetRecoil(float resetRecoilSpeed)
+    // Called by Gun on every shot
+    public void AddRecoil(Vector2 recoilAmount)
     {
-        currentRecoil = Vector3.MoveTowards(currentRecoil, Vector3.zero, Time.deltaTime*resetRecoilSpeed);
-        targetRecoil = Vector3.MoveTowards(targetRecoil, Vector3.zero, Time.deltaTime*resetRecoilSpeed);
+        recoilOffset += recoilAmount;
     }
 }

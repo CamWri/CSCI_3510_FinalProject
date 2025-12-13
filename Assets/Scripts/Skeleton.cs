@@ -56,12 +56,6 @@ public class Skeleton : MonoBehaviour
         anim.SetBool("isSpawning", true);
         swordHitbox.enabled = false;
 
-        Collider bodyCollider = GetComponent<Collider>();
-        if (bodyCollider != null)
-        {
-            Physics.IgnoreCollision(swordHitbox, bodyCollider, true);
-        }
-
         Invoke(nameof(FinishSpawn), spawnDuration);
     }
 
