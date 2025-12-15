@@ -1913,7 +1913,7 @@ MonoBehaviour:
   - {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   - {fileID: 3619385842440502987, guid: c8af26974f6dcb543913a0777c16abd7, type: 3}
   - {fileID: 3619385842440502987, guid: 4ecda5da3e6fc1e4d9ca15b5d62d326f, type: 3}
-  maxRooms: 25
+  maxRooms: 2
   maxAttempts: 500
   wallBuyCount: 1
   spawnedRooms: []

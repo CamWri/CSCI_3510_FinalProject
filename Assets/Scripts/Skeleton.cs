@@ -5,6 +5,26 @@ using System.Linq;
 
 public class Skeleton : MonoBehaviour
 {
+    [Header("Audio")]
+    public AudioSource audioSource;
+
+    public AudioClip spawnClip;
+    public AudioClip deathClip;
+    public AudioClip[] walkClips;
+
+    [Tooltip("Min time between footstep sounds")]
+    public float walkSoundMinInterval = 0.4f;
+
+    [Tooltip("Max time between footstep sounds")]
+    public float walkSoundMaxInterval = 0.8f;
+
+    float nextWalkSoundTime = 0f;
+
+    public AudioClip attackSlashClip;
+
+    bool hasPlayedAttackSound = false;
+
+    
     [Header("References")]
     public Transform player;
     public Animator anim;
@@ -54,7 +74,8 @@ public class Skeleton : MonoBehaviour
         // Spawn animation setup
         agent.speed = 0f;
         anim.SetBool("isSpawning", true);
-        swordHitbox.enabled = false;
+
+        PlayOneShot(spawnClip, 0.1f);
 
         Invoke(nameof(FinishSpawn), spawnDuration);
     }
@@ -68,11 +89,37 @@ public class Skeleton : MonoBehaviour
         agent.speed = walkSpeed + randomOffset;
     }
 
+    void PlayOneShot(AudioClip clip, float delay = 0f)
+    {
+        if (clip == null || audioSource == null) return;
+
+        if (delay <= 0f)
+        {
+            PlayNow(clip);
+        }
+        else
+        {
+            StartCoroutine(PlayOneShotDelayed(clip, delay));
+        }
+    }
+
+    void PlayNow(AudioClip clip)
+    {
+        audioSource.pitch = Random.Range(0.95f, 1.05f);
+        audioSource.PlayOneShot(clip);
+        audioSource.pitch = 1f;
+    }
+
+    IEnumerator PlayOneShotDelayed(AudioClip clip, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayNow(clip);
+    }
+
     void Update()
     {
         if (isDead || isSpawning || player == null) return;
 
-        // Always rotate toward the player when attacking
         if (isAttacking)
         {
             FacePlayer();
@@ -89,6 +136,9 @@ public class Skeleton : MonoBehaviour
         {
             TryAttack();
         }
+
+        // 🔊 Walking sound handler
+        HandleWalkingSound();
     }
 
     public void UpdateStats(int floor, int round)
@@ -142,6 +192,32 @@ public class Skeleton : MonoBehaviour
         anim.SetFloat("speed", agent.velocity.magnitude);
     }
 
+    void HandleWalkingSound()
+    {
+        if (walkClips == null || walkClips.Length == 0) return;
+        if (!agent || !agent.enabled) return;
+
+        bool isMoving =
+            agent.velocity.magnitude > 0.2f &&
+            !agent.isStopped &&
+            !isAttacking &&
+            !isSpawning &&
+            !isDead;
+
+        if (!isMoving) return;
+
+        if (Time.time >= nextWalkSoundTime)
+        {
+            AudioClip clip = walkClips[Random.Range(0, walkClips.Length)];
+            audioSource.PlayOneShot(clip, 0.2f);
+
+            nextWalkSoundTime = Time.time + Random.Range(
+                walkSoundMinInterval,
+                walkSoundMaxInterval
+            );
+        }
+    }
+
     void TryAttack()
     {
         // Stop agent movement COMPLETELY
@@ -163,8 +239,10 @@ public class Skeleton : MonoBehaviour
 
     IEnumerator AttackRoutine()
     {
-        isAttacking = true;
-        hasDealtDamageThisAttack = false;
+    isAttacking = true;
+    hasDealtDamageThisAttack = false;
+    hasPlayedAttackSound = false;
+
 
         // --- DAMAGE WINDOW SETTINGS ---
         float damageStart = 0.4f;   // when damage begins
@@ -173,6 +251,12 @@ public class Skeleton : MonoBehaviour
 
         // Wait until damage start moment
         yield return new WaitForSeconds(damageStart);
+
+        if (!hasPlayedAttackSound)
+        {
+            PlayOneShot(attackSlashClip);
+            hasPlayedAttackSound = true;
+        }
 
         // Enable continuous damage checks
         float elapsed = 0f;
@@ -214,6 +298,8 @@ public class Skeleton : MonoBehaviour
     void Die()
     {
         isDead = true;
+
+        PlayOneShot(deathClip, 0.25f);
 
         // Stop movement
         agent.isStopped = true;

@@ -47,7 +47,12 @@ public class SkeletonRoundManager : MonoBehaviour
         {
             Transform spawn = allEnemySpawnPoints[Random.Range(0, allEnemySpawnPoints.Count)].transform;
 
-            GameObject particleSystem = Instantiate(spawningParticleSystem, spawn.position, spawn.rotation);
+            GameObject particleSystem = Instantiate(
+                spawningParticleSystem,
+                spawn.position,
+                Quaternion.Euler(-90f, 90f, 0f)
+            );
+            
             Destroy(particleSystem, 2f);
 
             GameObject skeletonObj = Instantiate(skeletonPrefab, spawn.position, spawn.rotation);
