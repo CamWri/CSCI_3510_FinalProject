@@ -70,8 +70,7 @@ public class Gun : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && ready)
         {
             Reload();
-            currentPosition = transform.localPosition;
-            
+            currentPosition = transform.localPosition;  
         }
         if (reloading)
         {
@@ -119,7 +118,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
-            Skeleton skeleton = hit.transform.GetComponent<Skeleton>();
+            Skeleton skeleton = hit.transform.GetComponentInParent<Skeleton>();
             if (skeleton != null)
             {
                 skeleton.TakeDamage(damage);

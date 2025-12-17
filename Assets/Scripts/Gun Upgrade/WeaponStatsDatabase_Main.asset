@@ -69,27 +69,27 @@ MonoBehaviour:
     baseDamage: 1.5
     baseAmmo: 60
     baseFireRate: 0.5
-    baseRange: 125
+    baseRange: 250
     baseReloadTime: 0.75
     commonDamage: 1.5
     commonAmmo: 75
     commonFireRate: 0.4
-    commonRange: 125
+    commonRange: 250
     commonReloadTime: 0.75
     rareDamage: 1.75
     rareAmmo: 75
     rareFireRate: 0.3
-    rareRange: 150
+    rareRange: 300
     rareReloadTime: 0.75
     epicDamage: 1.75
     epicAmmo: 90
     epicFireRate: 0.2
-    epicRange: 175
+    epicRange: 350
     epicReloadTime: 0.75
     legendaryDamage: 2.25
     legendaryAmmo: 100
     legendaryFireRate: 0.1
-    legendaryRange: 200
+    legendaryRange: 400
     legendaryReloadTime: 0.75
   - weaponType: 3
     baseDamage: 20

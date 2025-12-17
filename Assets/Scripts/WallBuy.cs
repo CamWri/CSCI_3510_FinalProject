@@ -15,27 +15,28 @@ public class WallBuy : MonoBehaviour
     private void UpdateMessage()
     {
         GunSwap gunSwap = GameObject.FindGameObjectWithTag("Player")?.GetComponent<GunSwap>();
+        Gun currentGun = gunSwap?.GetCurrentGunScript();
 
-        if (gunSwap == null || gunSwap.GetCurrentGunScript() == null)
+        WeaponRarity nextRarity = GetNextRarity(currentGun, weaponType);
+
+        if (currentGun == null || currentGun.weaponType != weaponType)
         {
+            // Different weapon → buy
             interactable.message = $"Buy {weaponType} - ${baseWeaponCost}";
-            return;
         }
-
-        Gun gun = gunSwap.GetCurrentGunScript();
-
-        // If same weapon → show upgrade price
-        if (gun.weaponType == weaponType)
+        else if (currentGun.rarity == WeaponRarity.Legendary)
         {
-            int upgradeCost = GetUpgradeCost(gun.rarity);
-            interactable.message = $"Upgrade {weaponType} ({gun.rarity})\n→ ${upgradeCost}";
+            // Max rarity → maybe show “MAXED”
+            interactable.message = $"{weaponType} is MAXED!";
         }
         else
         {
-            // Different weapon → show buy price
-            interactable.message = $"Buy {weaponType} - ${baseWeaponCost}";
+            // Upgrade message showing next rarity
+            int upgradeCost = GetUpgradeCost(currentGun.rarity);
+            interactable.message = $"Upgrade {weaponType}\n{currentGun.rarity} → {nextRarity}\n${upgradeCost}";
         }
     }
+
 
     public void SwitchOrUpgradeWeapon()
     {
@@ -66,7 +67,7 @@ public class WallBuy : MonoBehaviour
             Debug.Log("Not enough money to buy weapon!");
             return;
         }
-
+        
         gunSwap.SelectGun(weaponType);
         UpdateMessage();
     }
@@ -81,5 +82,18 @@ public class WallBuy : MonoBehaviour
             case WeaponRarity.Epic: return baseWeaponCost * 40;
             default: return 999999;
         }
+    }
+
+    WeaponRarity GetNextRarity(Gun currentGun, WeaponType wallWeaponType)
+    {
+        // Case 1 – different weapon → first purchase
+        if (currentGun == null || currentGun.weaponType != wallWeaponType)
+            return WeaponRarity.Base;
+
+        // Case 2 – same weapon → next rarity
+        if (currentGun.rarity == WeaponRarity.Legendary)
+            return WeaponRarity.Legendary; // maxed out
+
+        return currentGun.rarity + 1;
     }
 }

@@ -54,6 +54,8 @@ public class HUDController : MonoBehaviour
         EndOfGameStatsPanel.SetActive(false);
         hitMarker.SetActive(false);
 
+        totalMoneyCount = PlayerMoneyManager.Instance.moneyCount;
+
         // Hide interaction text initially
         if (interactionText != null)
             interactionText.gameObject.SetActive(false);
@@ -125,7 +127,7 @@ public class HUDController : MonoBehaviour
     public void DeathUI()
     {
         TotalMoneyEarnedText.text = "Total Money Earned: $" + totalMoneyCount.ToString();
-        TotalRoundsSurvivedText.text = "Total Rounds Survived is " + totalRounds.ToString();
+        TotalRoundsSurvivedText.text = "Total Rounds Survived is " + (totalRounds - FloorManager.Instance.currentFloor).ToString();
         TotalSkeletonsKilledText.text = "Total Skeletons Killed is " + totalSkeletonsKilled.ToString();
         TotalFloorsSurvivedText.text = "Total Floors Visited is " + FloorManager.Instance.currentFloor.ToString();
 
