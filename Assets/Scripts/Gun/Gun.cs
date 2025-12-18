@@ -56,7 +56,6 @@ public class Gun : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         reloading = false;
         reloadAfterShootAnimation = false;
-        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
     private void Update()
     {
@@ -178,5 +177,18 @@ public class Gun : MonoBehaviour
         rarity++;
         ApplyStats();
         HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
+    }
+
+    public int getAmmo()
+    {
+        return ammo;
+    }
+
+    private void OnEnable()
+    {
+        if (HUDController.Instance != null)
+        {
+            HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
+        }
     }
 }

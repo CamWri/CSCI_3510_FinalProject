@@ -8,12 +8,7 @@ public class Menu : MonoBehaviour
 
     public void OnPlayMainButton()
     {
-        SceneManager.LoadScene("CamdenProceduralGeneration");
-    }
-
-    public void OnPlayDemoButton()
-    {
-        SceneManager.LoadScene("GunDemoScene");
+        SceneManager.LoadScene("ProceduralGeneration");
     }
 
     public void OnExitButton()

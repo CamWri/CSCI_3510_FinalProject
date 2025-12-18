@@ -2,13 +2,22 @@ using UnityEngine;
 
 public class GunSwap : MonoBehaviour
 {
+    private static GunSwap Instance;
     public GameObject[] guns;  // must match enum order
     public WeaponType currentGunType = WeaponType.Pistol;
     private GameObject currentGun;      // store the actual gun instance
     private Gun currentGunScript;       // optional: store the gun logic component
 
-    private void Awake()
+    private void Start()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         EquipGun(currentGunType);
     }
 
@@ -30,8 +39,26 @@ public class GunSwap : MonoBehaviour
         currentGunType = type;
         currentGun = guns[index];
 
-        currentGunScript = currentGun.GetComponent<Gun>(); // optional
-        Debug.Log("Equipped gun: " + type);
+        if (currentGun == null)
+        {
+            Debug.LogError("GunSwap: Selected gun GameObject is null at index " + index);
+            return;
+        }
+
+        currentGunScript = currentGun.GetComponent<Gun>();
+
+        if (currentGunScript == null)
+        {
+            Debug.LogError("GunSwap: No Gun component found on " + currentGun.name);
+            return;
+        }
+
+        if (HUDController.Instance != null)
+        {
+            int ammo = currentGunScript.database.GetAmmo(currentGunType, currentGunScript.rarity);
+
+            HUDController.Instance.UpdateWeaponText(ammo, ammo);
+        }
     }
 
     private void Update()

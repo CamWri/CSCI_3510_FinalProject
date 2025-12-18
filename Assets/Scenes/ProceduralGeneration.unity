@@ -3647,6 +3647,18 @@ PrefabInstance:
       propertyPath: ignoreLayer.m_Bits
       value: 1024
       objectReference: {fileID: 0}
+    - target: {fileID: 975695724613109072, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3125627112898064718, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5070388324440444099, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5448805895678251039, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: m_Name
       value: CameraHolder
@@ -3707,6 +3719,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7476842145641214794, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7616351716892160367, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: rarity
       value: 0
@@ -3741,7 +3757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8013537478187477421, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: recoilAmount
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8013537478187477421, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: ignoreLayer.m_Bits

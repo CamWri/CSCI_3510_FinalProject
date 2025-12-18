@@ -123,7 +123,7 @@ public class HUDController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void DeathUI()
