@@ -3584,7 +3584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: currentGunType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: 'guns.Array.data[0]'
@@ -3709,7 +3709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7616351716892160367, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: rarity
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7616351716892160367, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: maxRecoil.x
@@ -3761,7 +3761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8626904422406891923, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: rarity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8626904422406891923, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: maxRecoil.x
