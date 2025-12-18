@@ -42,7 +42,7 @@ public class PlayerCam : MonoBehaviour
         orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
-    // Smoothly returns recoil to zero
+    // --- Smoothly returns recoil to zero ---
     private void ProcessRecoil()
     {
         recoilOffset = Vector2.SmoothDamp(
@@ -53,7 +53,7 @@ public class PlayerCam : MonoBehaviour
         );
     }
 
-    // Called by Gun on every shot
+    // --- Called by Gun on every shot ---
     public void AddRecoil(Vector2 recoilAmount)
     {
         recoilOffset += recoilAmount;

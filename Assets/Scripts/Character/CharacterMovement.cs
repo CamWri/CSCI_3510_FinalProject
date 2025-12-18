@@ -27,8 +27,8 @@ public class CharacterMovement : MonoBehaviour
     public CharacterController controller;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
-    public LayerMask groundMask;       // primary ground
-    public LayerMask extraGroundMask;  // secondary ground
+    public LayerMask groundMask;
+    public LayerMask extraGroundMask;
     public Transform cameraTransform;
 
     private bool isGrounded;
@@ -102,7 +102,7 @@ public class CharacterMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, combinedMask);
 
         if (isGrounded && velocity.y < 0f)
-            velocity.y = -2f; // small downward force to stick to ground
+            velocity.y = -2f;
 
         // --- MOVEMENT ---
         controller.Move(moveInput * currentSpeed * Time.fixedDeltaTime);

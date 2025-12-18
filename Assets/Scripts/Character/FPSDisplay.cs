@@ -5,6 +5,7 @@ public class FPSDisplay : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // --- FPS Math Check ---
         InvokeRepeating("GetFPS", 1, 1);
     }
 

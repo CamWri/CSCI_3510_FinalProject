@@ -13,13 +13,6 @@ public class FreeCamera : MonoBehaviour
     private float rotationX = 0f;
     private float rotationY = 0f;
 
-    void Start()
-    {
-        // Lock cursor for free look
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     void Update()
     {
         HandleMouseLook();
@@ -27,19 +20,22 @@ public class FreeCamera : MonoBehaviour
     }
 
     void HandleMouseLook()
-    {
+    { 
+        // --- Mouse Change in Direction ---
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * (invertY ? 1 : -1);
 
         rotationX += mouseY;
         rotationY += mouseX;
 
+        // --- In World Rotation ---
         rotationX = Mathf.Clamp(rotationX, -90f, 90f);
         transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0f);
     }
 
     void HandleMovement()
     {
+        // --- WASD Movement  ---
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         bool sprint = Input.GetKey(KeyCode.LeftShift);

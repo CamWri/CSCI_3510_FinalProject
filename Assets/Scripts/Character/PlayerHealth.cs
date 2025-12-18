@@ -8,9 +8,8 @@ public class PlayerHealth : MonoBehaviour
     public bool invincible = false;
 
     [Header("Regeneration Settings")]
-    public float regenDelay = 3f;       // Seconds to wait after last damage
-    public float regenRate = 10f;       // Health per second
-
+    public float regenDelay = 3f;
+    public float regenRate = 10f; 
     [Header("Events")]
     public UnityEvent onTakeDamage;
     public UnityEvent onDeath;
@@ -21,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
     void Awake()
     {
         currentHealth = maxHealth;
-        lastDamageTime = -regenDelay; // ensures regen can start immediately if needed
+        lastDamageTime = -regenDelay;
     }
 
     void Start()
@@ -34,9 +33,6 @@ public class PlayerHealth : MonoBehaviour
         HandleRegeneration();
     }
 
-    /// <summary>
-    /// Apply damage to the player
-    /// </summary>
     public void TakeDamage(float amount)
     {
         if (invincible || currentHealth <= 0f) return;
@@ -48,7 +44,6 @@ public class PlayerHealth : MonoBehaviour
         HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
         Debug.Log($"{gameObject.name} took {amount} damage. Current health: {currentHealth}");
 
-        // Reset regeneration timer
         lastDamageTime = Time.time;
 
         onTakeDamage?.Invoke();
@@ -57,9 +52,6 @@ public class PlayerHealth : MonoBehaviour
             Die();
     }
 
-    /// <summary>
-    /// Heal the player by a fixed amount
-    /// </summary>
     public void Heal(float amount)
     {
         if (currentHealth <= 0f) return;
@@ -72,9 +64,6 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log($"{gameObject.name} healed {amount}. Current health: {currentHealth}");
     }
 
-    /// <summary>
-    /// Increase max health
-    /// </summary>
     public void IncreaseMaxHP(float amount)
     {
         maxHealth += amount;
@@ -85,9 +74,6 @@ public class PlayerHealth : MonoBehaviour
         HUDController.Instance.UpdateHealthBar(currentHealth, maxHealth);
     }
 
-    /// <summary>
-    /// Handles smooth regeneration over time after regenDelay
-    /// </summary>
     private void HandleRegeneration()
     {
         if (currentHealth <= 0f || currentHealth >= maxHealth) return;
@@ -103,22 +89,12 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handles player death
-    /// </summary>
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died.");
         onDeath?.Invoke();
     }
 
-    /// <summary>
-    /// Returns current health value
-    /// </summary>
     public float GetHealth() => currentHealth;
-
-    /// <summary>
-    /// Returns current health as percentage (0-1)
-    /// </summary>
     public float GetHealthPercent() => currentHealth / maxHealth;
 }
