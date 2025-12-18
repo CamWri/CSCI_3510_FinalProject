@@ -299,29 +299,32 @@ public class Skeleton : MonoBehaviour
     {
         isDead = true;
 
+        StopAllCoroutines(); // prevent lingering coroutines from touching agent
+
         PlayOneShot(deathClip, 0.25f);
 
         // Stop movement
-        agent.isStopped = true;
-        agent.velocity = Vector3.zero;
+        if(agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+            agent.enabled = false; // disable AFTER stopping
+        }
 
         // Play death animation
         anim.SetBool("isDead", true);
 
-        // Disable collisions so the dead skeleton doesn't block anything
+        // Disable collisions
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
-
-        // Optionally disable NavMeshAgent so it doesn't interfere
-        if (agent != null) agent.enabled = false;
 
         // Notify round manager
         if (roundManager != null)
             roundManager.OnSkeletonKilled();
 
-        // Destroy after animation duration
         Destroy(gameObject, deathDuration);
     }
+
     public void DealSwordDamage()
     {
         if (!isAttacking) return; // ensure mid-attack

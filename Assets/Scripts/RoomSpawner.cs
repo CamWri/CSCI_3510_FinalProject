@@ -47,9 +47,6 @@ public class RoomSpawner : MonoBehaviour
     /// </summary>
     private IEnumerator GenerateLevelRoutine()
     {
-        // Disable all NavMeshAgents until generation completes
-        DisableAllAgents();
-
         // Generate rooms
         GenerateRooms();
 
@@ -67,8 +64,6 @@ public class RoomSpawner : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         // Re-enable NavMeshAgents
-        EnableAllAgents();
-
         // Spawn wall buys
         for (int i = 0; i < wallBuyCount; i++)
             SpawnRandomWallBuy();
@@ -197,18 +192,6 @@ public class RoomSpawner : MonoBehaviour
 
         WallBuy newWallBuy = Instantiate(prefab, location.position, location.rotation);
         wallBuyLocations.Remove(location);
-    }
-
-    private void DisableAllAgents()
-    {
-        foreach (var agent in FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None))
-            agent.enabled = false;
-    }
-
-    private void EnableAllAgents()
-    {
-        foreach (var agent in FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None))
-            agent.enabled = true;
     }
 
     #endregion

@@ -42,6 +42,9 @@ public class Gun : MonoBehaviour
     public PlayerCam playerCam;
     private Camera fpsCamera;
 
+    [Header("Raycasting Hit Settings")]
+    public LayerMask ignoreLayer;
+
     private void Start()
     {
         ApplyStats();
@@ -128,7 +131,7 @@ public class Gun : MonoBehaviour
 
         // Hit detection
         RaycastHit hit;
-        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range, ~ignoreLayer))
         {
             Skeleton skeleton = hit.transform.GetComponentInParent<Skeleton>();
             if (skeleton != null)
