@@ -17,7 +17,7 @@ public class CharacterMovement : MonoBehaviour
     public float jumpHeight = 1.5f;
     public float gravity = -9.81f;
     private Vector3 velocity;
-    private bool isGrounded;
+    private bool jumpRequested;
 
     [Header("Slope & Step Handling")]
     public float slopeLimit = 45f;
@@ -30,6 +30,9 @@ public class CharacterMovement : MonoBehaviour
     public LayerMask groundMask;       // primary ground
     public LayerMask extraGroundMask;  // secondary ground
     public Transform cameraTransform;
+
+    private bool isGrounded;
+    private Vector3 moveInput;
 
     public static CharacterMovement Instance;
 
@@ -60,17 +63,12 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
-        // Ground check against both masks
-        bool groundedPrimary = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        bool groundedExtra   = Physics.CheckSphere(groundCheck.position, groundDistance, extraGroundMask);
-        isGrounded = groundedPrimary || groundedExtra;
+        // --- INPUT HANDLING ---
 
-        if (isGrounded && velocity.y < 0)
-            velocity.y = -2f;
-
-        // Input
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
+        bool sprintPressed = Input.GetKey(KeyCode.LeftShift);
+        bool crouchPressed = Input.GetKey(KeyCode.C);
 
         // Camera-relative movement
         Vector3 forward = cameraTransform.forward;
@@ -80,32 +78,46 @@ public class CharacterMovement : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        Vector3 move = right * x + forward * z;
-        move = Vector3.ClampMagnitude(move, 1f);
+        moveInput = right * x + forward * z;
+        if (moveInput.magnitude > 1f)
+            moveInput.Normalize();
 
         // Speed & crouch
-        if (Input.GetKey(KeyCode.C))
-        {
-            currentSpeed = crouchSpeed;
+        if (crouchPressed && controller.height != crouchHeight)
             controller.height = crouchHeight;
-        }
-        else
-        {
+        else if (!crouchPressed && controller.height != originalHeight)
             controller.height = originalHeight;
-            currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
-        }
 
-        // Move horizontally
-        controller.Move(move * currentSpeed * Time.deltaTime);
+        currentSpeed = crouchPressed ? crouchSpeed : (sprintPressed ? sprintSpeed : walkSpeed);
 
-        // Jumping
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        // Jump input
+        if (Input.GetButtonDown("Jump"))
+            jumpRequested = true;
+    }
+
+    void FixedUpdate()
+    {
+        // --- GROUND CHECK ---
+        int combinedMask = groundMask | extraGroundMask;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, combinedMask);
+
+        if (isGrounded && velocity.y < 0f)
+            velocity.y = -2f; // small downward force to stick to ground
+
+        // --- MOVEMENT ---
+        controller.Move(moveInput * currentSpeed * Time.fixedDeltaTime);
+
+        // --- JUMPING ---
+        if (jumpRequested && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            jumpRequested = false;
         }
 
-        // Gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        // --- GRAVITY ---
+        if (!isGrounded)
+            velocity.y += gravity * Time.fixedDeltaTime;
+
+        controller.Move(velocity * Time.fixedDeltaTime);
     }
 }
