@@ -40,29 +40,29 @@ MonoBehaviour:
     legendaryRange: 700
     legendaryReloadTime: 0.25
   - weaponType: 2
-    baseDamage: 2
+    baseDamage: 3
     baseAmmo: 20
-    baseFireRate: 1.5
+    baseFireRate: 0.5
     baseRange: 100
     baseReloadTime: 1.5
-    commonDamage: 2
+    commonDamage: 3
     commonAmmo: 30
-    commonFireRate: 1.5
+    commonFireRate: 0.5
     commonRange: 100
     commonReloadTime: 1.5
-    rareDamage: 2
+    rareDamage: 3.5
     rareAmmo: 40
-    rareFireRate: 2
+    rareFireRate: 0.4
     rareRange: 100
     rareReloadTime: 1.25
-    epicDamage: 2.5
+    epicDamage: 3.5
     epicAmmo: 50
-    epicFireRate: 2
+    epicFireRate: 0.3
     epicRange: 100
     epicReloadTime: 1.25
-    legendaryDamage: 3
+    legendaryDamage: 5
     legendaryAmmo: 80
-    legendaryFireRate: 3
+    legendaryFireRate: 0.2
     legendaryRange: 100
     legendaryReloadTime: 1.25
   - weaponType: 1
@@ -94,26 +94,26 @@ MonoBehaviour:
   - weaponType: 3
     baseDamage: 20
     baseAmmo: 5
-    baseFireRate: 3
+    baseFireRate: 2
     baseRange: 300
     baseReloadTime: 3
     commonDamage: 40
     commonAmmo: 6
-    commonFireRate: 3
+    commonFireRate: 2
     commonRange: 300
     commonReloadTime: 3
     rareDamage: 60
     rareAmmo: 7
-    rareFireRate: 3
+    rareFireRate: 2
     rareRange: 300
     rareReloadTime: 3
     epicDamage: 80
     epicAmmo: 8
-    epicFireRate: 3
+    epicFireRate: 1
     epicRange: 300
     epicReloadTime: 3
     legendaryDamage: 100
     legendaryAmmo: 10
-    legendaryFireRate: 2
+    legendaryFireRate: 1
     legendaryRange: 300
     legendaryReloadTime: 3

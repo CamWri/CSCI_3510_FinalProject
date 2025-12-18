@@ -21,6 +21,7 @@ public class Gun : MonoBehaviour
     private float nextTimeToFire;
     float reloadStartTime;
     bool reloading;
+    bool reloadAfterShootAnimation;
     int currentAmmo;
     [Header("Gun Animations/Sound")]
     public ParticleSystem muzzleFlash;
@@ -51,7 +52,8 @@ public class Gun : MonoBehaviour
         reloadMovementTime = reloadTime/4f;
         audioSource = GetComponent<AudioSource>();
         reloading = false;
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        reloadAfterShootAnimation = false;
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
     private void Update()
     {
@@ -62,15 +64,25 @@ public class Gun : MonoBehaviour
             Shoot();
             currentPosition = transform.localPosition;
         }
-        else if(currentAmmo == 0)
+        else if(currentAmmo == 0 && !reloading && !shootAnimation)
         {
             Reload();
             currentPosition = transform.localPosition;
         }
-        if (Input.GetKeyDown(KeyCode.R) && ready)
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && shootAnimation)
+        {
+            reloadAfterShootAnimation = true;  
+        }
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && !shootAnimation)
         {
             Reload();
-            currentPosition = transform.localPosition;  
+            currentPosition = transform.localPosition;
+        }
+        if (!shootAnimation && reloadAfterShootAnimation)
+        {
+            Reload();
+            currentPosition = transform.localPosition;
+            reloadAfterShootAnimation = false;
         }
         if (reloading)
         {
@@ -112,7 +124,7 @@ public class Gun : MonoBehaviour
         playerCam.AddRecoil(recoil);
 
         currentAmmo -= 1;
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
 
         // Hit detection
         RaycastHit hit;
@@ -136,7 +148,7 @@ public class Gun : MonoBehaviour
     {
         currentAmmo = ammo;
 
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
 
         reloading = true;
         reloadStartTime = Time.time;
@@ -162,6 +174,6 @@ public class Gun : MonoBehaviour
 
         rarity++;
         ApplyStats();
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
 }

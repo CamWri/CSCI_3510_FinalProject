@@ -149,9 +149,9 @@ public class HUDController : MonoBehaviour
         healthBarSlider.maxValue = maxHP;
     }
 
-    public void UpdateWeaponText(int amount)
+    public void UpdateWeaponText(int amount, int max)
     {
-        weaponAmmoText.text = amount.ToString();
+        weaponAmmoText.text = amount.ToString() + " / " + max.ToString();
     }
 
     private Coroutine hitMarkerRoutine;

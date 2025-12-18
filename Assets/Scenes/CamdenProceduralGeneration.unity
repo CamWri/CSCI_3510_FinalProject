@@ -3433,7 +3433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: currentGunType
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: 'guns.Array.data[0]'
@@ -3483,6 +3483,14 @@ PrefabInstance:
     - target: {fileID: 187070335423098967, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 539826252365089210, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: maxRecoil.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 539826252365089210, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: recoilAmount
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5448805895678251039, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: m_Name
