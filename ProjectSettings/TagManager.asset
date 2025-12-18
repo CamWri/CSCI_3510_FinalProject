@@ -11,6 +11,7 @@ TagManager:
   - Interactable
   - TestZombie
   - Decoration
+  - Slime1
   layers:
   - Default
   - TransparentFX
