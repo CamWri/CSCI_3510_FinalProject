@@ -22,9 +22,11 @@ public class HUDController : MonoBehaviour
     [SerializeField] TMP_Text weaponAmmoText;
 
 
-    [Header("Healthbar")]
+    [Header("Healthbar and Frame Rate")]
     [SerializeField] Slider healthBarSlider;
     [SerializeField] TMP_Text healthBarValueText;
+    [SerializeField] TMP_Text FrameRateValueText;
+
 
 
     [Header("End Of Game UI")]
@@ -172,5 +174,10 @@ public class HUDController : MonoBehaviour
     {
         yield return new WaitForSeconds(hitMarkerDuration);
         hitMarker.SetActive(false);
+    }
+
+    public void UpdateFrameRateText(int frameRate)
+    {
+        FrameRateValueText.text = "FPS: " + frameRate.ToString();
     }
 }
