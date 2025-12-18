@@ -21,6 +21,7 @@ public class Gun : MonoBehaviour
     private float nextTimeToFire;
     float reloadStartTime;
     bool reloading;
+    bool reloadAfterShootAnimation;
     int currentAmmo;
     [Header("Gun Animations/Sound")]
     public ParticleSystem muzzleFlash;
@@ -51,6 +52,7 @@ public class Gun : MonoBehaviour
         reloadMovementTime = reloadTime/4f;
         audioSource = GetComponent<AudioSource>();
         reloading = false;
+        reloadAfterShootAnimation = false;
         HUDController.Instance.UpdateWeaponText(currentAmmo);
     }
     private void Update()
@@ -64,15 +66,23 @@ public class Gun : MonoBehaviour
         }
         else if(currentAmmo == 0 && !reloading && !shootAnimation)
         {
-            reloading = true;
             Reload();
             currentPosition = transform.localPosition;
         }
-        else if (Input.GetKeyDown(KeyCode.R) && !reloading && !shootAnimation)
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && shootAnimation)
         {
-            reloading = true;
+            reloadAfterShootAnimation = true;  
+        }
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && !shootAnimation)
+        {
             Reload();
-            currentPosition = transform.localPosition;  
+            currentPosition = transform.localPosition;
+        }
+        if (!shootAnimation && reloadAfterShootAnimation)
+        {
+            Reload();
+            currentPosition = transform.localPosition;
+            reloadAfterShootAnimation = false;
         }
         if (reloading)
         {
