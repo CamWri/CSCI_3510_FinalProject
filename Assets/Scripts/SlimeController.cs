@@ -22,7 +22,6 @@ public class SlimeController : MonoBehaviour
     float hopTimer;
     bool isHopping;
     bool isDead = false;
-    bool isSpawning = false;
     public float deathDuration = 1f;
 
     [Header("Slime Splitting")]
@@ -30,9 +29,10 @@ public class SlimeController : MonoBehaviour
     public int maxTier = 2;
     public GameObject slimePrefab;
 
+    Collider slimeCollider;
+
     void Start()
     {
-        // Only run runtime code in Play Mode
         if (!Application.isPlaying) return;
 
         if (player == null)
@@ -44,19 +44,31 @@ public class SlimeController : MonoBehaviour
 
         roundManager = FindFirstObjectByType<SkeletonRoundManager>();
 
+        slimeCollider = GetComponent<Collider>();
+
         if (agent != null)
         {
-            agent.isStopped = true;
-            agent.updatePosition = true;
-            agent.updateRotation = true;
-            agent.updateUpAxis = false;
+            if (!agent.isOnNavMesh)
+            {
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+                {
+                    transform.position = hit.position;
+                }
+            }
+
+            if (agent.isOnNavMesh)
+            {
+                agent.updatePosition = true;
+                agent.updateRotation = true;
+                agent.isStopped = true;
+            }
         }
     }
 
     void Update()
     {
-        if (!Application.isPlaying) return;
-        if (isDead || isSpawning || player == null) return;
+        if (!Application.isPlaying || isDead || player == null) return;
 
         hopTimer += Time.deltaTime;
         FacePlayer();
@@ -73,7 +85,7 @@ public class SlimeController : MonoBehaviour
         if (player == null) return;
 
         Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0; // horizontal rotation only
+        direction.y = 0;
 
         if (direction.sqrMagnitude > 0.01f)
         {
@@ -85,46 +97,80 @@ public class SlimeController : MonoBehaviour
     IEnumerator HopTowardPlayer()
     {
         if (agent == null || player == null || anim == null) yield break;
+        if (!agent.enabled) yield break;
 
         isHopping = true;
 
-        agent.isStopped = false;
-        agent.updatePosition = true;
-        agent.updateRotation = true;
 
-        Vector3 direction = (player.position - transform.position).normalized;
-        Vector3 target = transform.position + direction * hopDistance;
-
-        if (NavMesh.SamplePosition(target, out NavMeshHit hit, hopDistance, NavMesh.AllAreas))
+        if (agent != null && agent.isOnNavMesh)
         {
-            agent.SetDestination(hit.position);
+            agent.isStopped = true;
         }
+
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+        agent.velocity = Vector3.zero;
+
+        Vector3 startPos = transform.position;
+        Vector3 direction = (player.position - transform.position).normalized;
+        Vector3 targetPos = startPos + direction * hopDistance;
+
+        // Clamp to NavMesh
+        if (NavMesh.SamplePosition(targetPos, out NavMeshHit hit, hopDistance, NavMesh.AllAreas))
+            targetPos = hit.position;
 
         anim.SetTrigger("hop");
 
-        float startY = transform.position.y;
-        float t = 0f;
+        float duration = 0.6f;
+        float elapsed = 0f;
 
-        while (t < 1f)
+        while (elapsed < duration)
         {
-            t += Time.deltaTime * agent.speed;
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
 
+            Vector3 flatPos = Vector3.Lerp(startPos, targetPos, t);
             float height = Mathf.Sin(t * Mathf.PI) * hopHeight;
-            transform.position = new Vector3(transform.position.x, startY + height, transform.position.z);
 
+            transform.position = flatPos + Vector3.up * height;
             yield return null;
         }
 
-        agent.isStopped = true;
-        agent.velocity = Vector3.zero;
-        agent.nextPosition = transform.position;
-
         anim.SetTrigger("land");
-
-        yield return new WaitForSeconds(0.05f);
         DealLandingDamage();
 
+        // Snap to true ground using collider bounds
+        Vector3 groundedPos = GetGroundedPosition(transform.position);
+
+        // Only warp if the position is on a valid NavMesh
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(groundedPos, out navHit, 1f, NavMesh.AllAreas))
+        {
+            transform.position = navHit.position;
+            if (agent.isOnNavMesh)
+            {
+                agent.Warp(navHit.position);
+                agent.updatePosition = true;
+                agent.updateRotation = true;
+                agent.isStopped = true;
+            }
+        }
+        else
+        {
+            // Just snap the transform, agent stays disabled
+            transform.position = groundedPos;
+        }
+
+
         isHopping = false;
+    }
+
+    Vector3 GetGroundedPosition(Vector3 position)
+    {
+        Vector3 origin = position + Vector3.up * 0.1f;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10f))
+            return hit.point; // no offset
+        return position;
     }
 
     public void TakeDamage(float amount)
@@ -136,7 +182,6 @@ public class SlimeController : MonoBehaviour
         {
             if (PlayerMoneyManager.Instance != null)
                 PlayerMoneyManager.Instance.AddMoney(100);
-
             Die();
         }
     }
@@ -155,8 +200,7 @@ public class SlimeController : MonoBehaviour
         if (anim != null)
             anim.SetBool("isDead", true);
 
-        Collider col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
+        if (slimeCollider != null) slimeCollider.enabled = false;
 
         if (slimeTier < maxTier)
             Split();
@@ -193,7 +237,7 @@ public class SlimeController : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        Vector3 center = transform.position + Vector3.up * 0.5f;
+        Vector3 center = transform.position + Vector3.up * 0.1f; // near bottom
         Collider[] hits = Physics.OverlapSphere(center, landingDamageRadius, playerMask);
 
         foreach (Collider hit in hits)
@@ -209,8 +253,11 @@ public class SlimeController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Only draw gizmos in editor
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 0.5f, landingDamageRadius);
+        float bottomOffset = 0.1f;
+        if (slimeCollider != null)
+            bottomOffset = slimeCollider.bounds.extents.y;
+        Vector3 center = transform.position - Vector3.up * bottomOffset + Vector3.up * 0.1f;
+        Gizmos.DrawWireSphere(center, landingDamageRadius);
     }
 }

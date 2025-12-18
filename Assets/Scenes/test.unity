@@ -129,7 +129,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2021926822154840307, guid: 0d780173c250d334f80c9061373c8e4f, type: 3}
   m_PrefabInstance: {fileID: 1184435815}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &279115382
+--- !u!114 &279115378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,12 +143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
   m_SerializedVersion: 0
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2432
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -172,6 +172,10 @@ PrefabInstance:
     - target: {fileID: 1571042049591659991, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
       propertyPath: m_Name
       value: Skeleton_110
+      objectReference: {fileID: 0}
+    - target: {fileID: 1571042049591659991, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2199628841774520173, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -284,7 +288,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2021926822154840307, guid: 0d780173c250d334f80c9061373c8e4f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 279115382}
+      addedObject: {fileID: 279115378}
   m_SourcePrefab: {fileID: 100100000, guid: 0d780173c250d334f80c9061373c8e4f, type: 3}
 --- !u!4 &1452551880 stripped
 Transform:
@@ -518,13 +522,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 980728023613392477, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183876047514290040, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Height
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183876047514290040, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1851164038855348419, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.1234612
       objectReference: {fileID: 0}
     - target: {fileID: 1851164038855348419, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.14194965
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1851164038855348419, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: m_LocalPosition.z
@@ -558,10 +574,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5313262671044905847, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6140700864185912347, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6140700864185912347, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: slimePrefab
       value: 
       objectReference: {fileID: 6292428032079992036, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+    - target: {fileID: 6140700864185912347, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: groundOffset
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6140700864185912347, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: playerMask.m_Bits
       value: 64
@@ -569,6 +597,10 @@ PrefabInstance:
     - target: {fileID: 6292428032079992036, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: m_Name
       value: slimePrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 7088956327426183460, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7088956327426183460, guid: 774f280b6fe25ae48917dbaadeda0c86, type: 3}
       propertyPath: m_Controller
