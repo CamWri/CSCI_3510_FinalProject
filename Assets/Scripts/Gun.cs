@@ -53,7 +53,7 @@ public class Gun : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         reloading = false;
         reloadAfterShootAnimation = false;
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
     private void Update()
     {
@@ -124,7 +124,7 @@ public class Gun : MonoBehaviour
         playerCam.AddRecoil(recoil);
 
         currentAmmo -= 1;
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
 
         // Hit detection
         RaycastHit hit;
@@ -148,7 +148,7 @@ public class Gun : MonoBehaviour
     {
         currentAmmo = ammo;
 
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
 
         reloading = true;
         reloadStartTime = Time.time;
@@ -174,6 +174,6 @@ public class Gun : MonoBehaviour
 
         rarity++;
         ApplyStats();
-        HUDController.Instance.UpdateWeaponText(currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
 }
