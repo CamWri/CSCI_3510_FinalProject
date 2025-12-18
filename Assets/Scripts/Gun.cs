@@ -62,12 +62,12 @@ public class Gun : MonoBehaviour
             Shoot();
             currentPosition = transform.localPosition;
         }
-        else if(currentAmmo == 0)
+        else if(currentAmmo == 0 && !reloading)
         {
             Reload();
             currentPosition = transform.localPosition;
         }
-        if (Input.GetKeyDown(KeyCode.R) && ready)
+        if (Input.GetKeyDown(KeyCode.R) && !reloading)
         {
             Reload();
             currentPosition = transform.localPosition;  

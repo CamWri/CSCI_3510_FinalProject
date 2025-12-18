@@ -1945,9 +1945,9 @@ MonoBehaviour:
   - {fileID: 3619385842440502987, guid: 597e4544d7c3f1942b7e8bb9300b4e26, type: 3}
   - {fileID: 3619385842440502987, guid: c8af26974f6dcb543913a0777c16abd7, type: 3}
   - {fileID: 3619385842440502987, guid: 4ecda5da3e6fc1e4d9ca15b5d62d326f, type: 3}
-  maxRooms: 6
+  maxRooms: 2
   maxAttempts: 500
-  wallBuyCount: 3
+  wallBuyCount: 1
   spawnedRooms: []
   unusedExits: []
   exitsUsed: []
@@ -3433,7 +3433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: currentGunType
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4460804378113429366, guid: df28d1ef458fbcc4cb51045371ffb6c2, type: 3}
       propertyPath: 'guns.Array.data[0]'
@@ -3483,6 +3483,14 @@ PrefabInstance:
     - target: {fileID: 187070335423098967, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 539826252365089210, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: maxRecoil.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 539826252365089210, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
+      propertyPath: recoilAmount
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5448805895678251039, guid: ec46e5f04691fe748ae4e5e65f700132, type: 3}
       propertyPath: m_Name
