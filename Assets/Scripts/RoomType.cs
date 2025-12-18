@@ -6,7 +6,8 @@ public enum RoomType
     Start,
     Basic,
     Hallway,
-    LShape, 
+    Large,
+    Connector, 
 }
 
 public static class RoomTypeExtensions
@@ -16,7 +17,8 @@ public static class RoomTypeExtensions
         { RoomType.Start, "Starting Room" },
         { RoomType.Basic, "Basic Room" },
         { RoomType.Hallway, "Hallway" },
-        { RoomType.LShape, "L Shape Room" },
+        { RoomType.Large, "Large Room" },
+        { RoomType.Connector, "Connector Room" },
     };
 
     public static string ToDisplayName(this RoomType type)

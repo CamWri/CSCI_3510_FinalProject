@@ -4,7 +4,19 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/StartScene.unity
+    guid: 866ed724b2fe0cc4088489fe830c6d50
+  - enabled: 1
+    path: Assets/Scenes/CamdenProceduralGeneration.unity
+    guid: a8b151671288f934f93e3008e37fcba8
+  - enabled: 1
+    path: Assets/Scenes/GunDemoScene.unity
+    guid: ce8c72768415a1645867507cf6375f28
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: b6d6fa5590f2ecd44bab6ccf407f3434
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   m_UseUCBPForAssetBundles: 0

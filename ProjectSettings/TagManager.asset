@@ -5,7 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - GeneratedRoom
+  - Skeleton
+  - Zombie
+  - Exit
+  - Interactable
   - TestZombie
+  - Decoration
   layers:
   - Default
   - TransparentFX
@@ -13,15 +18,15 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Player
   - Floor
   - Wall
   - 
   - GeneratedRoom
-  - 
+  - Decoration
   - WeaponLayer
-  - 
-  - 
+  - EnemyWeapon
+  - Test
   - 
   - 
   - 
