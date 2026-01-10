@@ -852,6 +852,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraHolder
       objectReference: {fileID: 0}
+    - target: {fileID: 6584819619765477909, guid: c40bceb377146b04c84079018c2d421a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6782273174577590906, guid: c40bceb377146b04c84079018c2d421a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.27079

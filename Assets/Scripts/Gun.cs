@@ -3,17 +3,25 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [Header("Weapon Identity")]
+    public WeaponType weaponType;
+    public WeaponRarity rarity;
+
+    [Header("Stats Database")]
+    public WeaponStatsDatabase database;
+
     [Header("Gun Data")]
-    public float range = 100f;
-    public float fireRate = 1.0f;
-    public float damage = 30f;
-    public int ammo = 30;
-    public float reloadTime = 1f;
     public bool isAuto = false;
+    private float range;
+    private float fireRate;
+    private float damage;
+    private int ammo;
+    private float reloadTime;
 
     private float nextTimeToFire;
     float reloadStartTime;
     bool reloading;
+    bool reloadAfterShootAnimation;
     int currentAmmo;
     [Header("Gun Animations/Sound")]
     public ParticleSystem muzzleFlash;
@@ -25,24 +33,30 @@ public class Gun : MonoBehaviour
     bool shootAnimation;
     float shootAnimationStartTime;
     Vector3 currentPosition;
+
     [Header("Gun Recoil")]
     public float recoilAmount;
     public Vector2 maxRecoil;
-    public float recoilSpeed;
-    public float resetRecoilSpeed;
 
     [Header("Camera Input Object")]
-    public NewMonoBehaviourScript playerCam;
+    public PlayerCam playerCam;
     private Camera fpsCamera;
+
+    [Header("Raycasting Hit Settings")]
+    public LayerMask ignoreLayer;
 
     private void Start()
     {
+        ApplyStats();
+
         fpsCamera = GameObject.Find("CameraHolder/Main Camera").GetComponent<Camera>();
         nextTimeToFire = 0.0f;
         currentAmmo = ammo;
         reloadMovementTime = reloadTime/4f;
         audioSource = GetComponent<AudioSource>();
         reloading = false;
+        reloadAfterShootAnimation = false;
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
     private void Update()
     {
@@ -53,16 +67,25 @@ public class Gun : MonoBehaviour
             Shoot();
             currentPosition = transform.localPosition;
         }
-        else if(currentAmmo == 0)
+        else if(currentAmmo == 0 && !reloading && !shootAnimation)
         {
             Reload();
             currentPosition = transform.localPosition;
         }
-        if (Input.GetKeyDown(KeyCode.R) && ready)
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && shootAnimation)
+        {
+            reloadAfterShootAnimation = true;  
+        }
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && !shootAnimation)
         {
             Reload();
             currentPosition = transform.localPosition;
-            
+        }
+        if (!shootAnimation && reloadAfterShootAnimation)
+        {
+            Reload();
+            currentPosition = transform.localPosition;
+            reloadAfterShootAnimation = false;
         }
         if (reloading)
         {
@@ -71,7 +94,6 @@ public class Gun : MonoBehaviour
             {
                 currentAmmo = ammo;
                 reloading = false;
-                Debug.Log("Reload Done");
             }
         }
         if (shootAnimation)
@@ -82,8 +104,6 @@ public class Gun : MonoBehaviour
                 shootAnimation = false;
             }
         }
-
-        playerCam.ResetRecoil(resetRecoilSpeed);
     }
 
     void Shoot()
@@ -93,25 +113,35 @@ public class Gun : MonoBehaviour
             muzzleFlash.Emit(1);
             muzzleFlash.Play();
         }
+
         if (audioSource != null && fireSound != null)
-        {
             audioSource.PlayOneShot(fireSound, 0.7f);
-        }
-        playerCam.ApplyRecoil(maxRecoil, recoilAmount, recoilSpeed);
+
+        // Add camera recoil
+        Vector2 recoil = new Vector2(
+            UnityEngine.Random.Range(-maxRecoil.x, maxRecoil.x) * recoilAmount,
+            UnityEngine.Random.Range(0f, maxRecoil.y) * recoilAmount
+        );
+
+
+        playerCam.AddRecoil(recoil);
 
         currentAmmo -= 1;
-        Debug.Log("Current ammo: " + currentAmmo);
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
+
+        // Hit detection
         RaycastHit hit;
-
-        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range, ~ignoreLayer))
         {
-            Target target = hit.transform.GetComponent<Target>();
-
-            if (target != null) 
+            Skeleton skeleton = hit.transform.GetComponentInParent<Skeleton>();
+            if (skeleton != null)
             {
-                target.Process(hit, damage);
+                skeleton.TakeDamage(damage);
+                PlayerMoneyManager.Instance.AddMoney(10);
+                HUDController.Instance.ShowHitMarker();
             }
         }
+
         shootAnimation = true;
         shootAnimationStartTime = Time.time;
         nextTimeToFire = Time.time + fireRate;
@@ -120,11 +150,33 @@ public class Gun : MonoBehaviour
     void Reload()
     {
         currentAmmo = ammo;
+
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
+
         reloading = true;
         reloadStartTime = Time.time;
         audioSource.PlayOneShot(reloadSound, 0.7f);
 
-        Debug.Log("Reloading....");
         nextTimeToFire = Time.time + reloadTime;
+    }
+
+    public void ApplyStats()
+    {
+        damage = database.GetDamage(weaponType, rarity);
+        ammo = database.GetAmmo(weaponType, rarity);
+        fireRate = database.GetFireRate(weaponType, rarity);
+        range = database.GetRange(weaponType, rarity);
+        reloadTime = database.GetReloadTime(weaponType, rarity);
+    }
+
+
+    public void UpgradeWeapon()
+    {
+        if (rarity == WeaponRarity.Legendary)
+            return;
+
+        rarity++;
+        ApplyStats();
+        HUDController.Instance.UpdateWeaponText(currentAmmo, ammo);
     }
 }

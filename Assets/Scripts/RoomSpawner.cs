@@ -1,100 +1,124 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
-using System.Collections;
 
 public class RoomSpawner : MonoBehaviour
 {
-    /*
-        Some things to make it better
-            - Similar to rooms, I would need to check for collisions with the RoomExit inside of RoomExit.cs and if its in collision, remove that room
-                Make my own collision layer for it, adjust the existing box colliders on the RoomExits,  if it collides with anything not in the same GameObject, you can remove the Door Exit from openExits 
+    [Header("Zombie Spawning")]
+    public SkeletonRoundManager skeletonRoundManager;
 
-        For doors that can open and close, mark them as NavMeshObstacle, Add a NavMeshObstacle component with Carve = true, and Toggle enabled at runtime when the door opens/closes.
-    */
-
+    [Header("Player")]
     public GameObject player;
-    public GameObject door;
 
-
+    [Header("Room Generation Logic")]
     public Room StartRoom;
     public List<Room> roomPrefabs;
     public int maxRooms = 10;
     public int maxAttempts = 5;
+    public int wallBuyCount = 1;
+
     private int currentAttempts = 0;
+    private int spawnedRoomsCount = 0;
 
-
-    private int spawnedRoomsCount;
     public List<Room> spawnedRooms = new();
-    public List<RoomExit> openExits = new();
+    public List<RoomExit> unusedExits = new();
+    public List<RoomExit> exitsUsed = new();
+
+    public List<WallBuy> possibleWallBuys = new();
+    private List<Transform> wallBuyLocations = new();
+    public List<EnemySpawnPoints> allEnemySpawnPoints = new();
 
     public NavMeshSurface globalNavMeshSurface;
 
+    private void Awake()
+    {
+        skeletonRoundManager = FindFirstObjectByType<SkeletonRoundManager>();
+    }
+
     private void Start()
     {
-        GenerateNewLevel();
+        StartCoroutine(GenerateLevelRoutine());
     }
 
-    public void GenerateNewLevel()
+    /// <summary>
+    /// Full async generation pipeline
+    /// </summary>
+    private IEnumerator GenerateLevelRoutine()
     {
-        Generate();
-        StartCoroutine(BuildNavMesh());
-    }
+        // Generate rooms
+        GenerateRooms();
 
-    private IEnumerator BuildNavMesh()
-    {
-        yield return new WaitForEndOfFrame();
+        // Close all exits
+        foreach (RoomExit exit in unusedExits) exit.CloseExit();
+        foreach (RoomExit exit in exitsUsed) exit.CloseExit();
+
+        // Wait a frame so all room transforms settle
+        yield return null;
+
+        // Build the NavMesh
         globalNavMeshSurface.BuildNavMesh();
-    } 
 
-    public void Generate()
+        // Wait one frame to ensure NavMesh jobs finish
+        yield return new WaitForEndOfFrame();
+
+        // Re-enable NavMeshAgents
+        // Spawn wall buys
+        for (int i = 0; i < wallBuyCount; i++)
+            SpawnRandomWallBuy();
+
+        // Start enemy spawning
+        skeletonRoundManager.startEnemySpawning(allEnemySpawnPoints);
+    }
+
+    /// <summary>
+    /// Generates rooms and collects exits, wall buys, and enemy spawn points
+    /// </summary>
+    private void GenerateRooms()
     {
+        // --- Start Room ---
         Room startRoom = InstantiateRoom(StartRoom, Vector3.zero, Quaternion.identity);
         spawnedRooms.Add(startRoom);
-        openExits.AddRange(startRoom.GetExits());
-        spawnedRoomsCount += 1;
+        unusedExits.AddRange(startRoom.GetExits());
+        wallBuyLocations.AddRange(startRoom.GetWallBuyLocations());
+        spawnedRoomsCount++;
 
-        while (spawnedRoomsCount < maxRooms && openExits.Count > 0 && currentAttempts < maxAttempts)
+        // --- Procedural Generation Loop ---
+        while (spawnedRoomsCount < maxRooms && unusedExits.Count > 0 && currentAttempts < maxAttempts)
         {
             RoomExit exitToConnect = PickRandomExit();
+            Room prefabRoom = PickCompatibleRoom(exitToConnect);
 
-            Room prefabRoomToSpawn = PickCompatibleRoom(exitToConnect);
+            if (prefabRoom == null)
+                continue;
 
-            if (prefabRoomToSpawn == null)
+            Room newRoom = SpawnRoomAtExit(prefabRoom, exitToConnect);
+            currentAttempts++;
+
+            if (newRoom == null || CheckOverlap(newRoom))
             {
-                openExits.Remove(exitToConnect);
+                Destroy(newRoom?.gameObject);
                 continue;
             }
 
-            Room newRoom = SpawnRoomAtExit(prefabRoomToSpawn, exitToConnect);
-            currentAttempts += 1;
-
-            if (newRoom == null)
-            {
-                openExits.Remove(exitToConnect);
-                continue;
-            }
-
-            if (CheckOverlap(newRoom))
-            {
-                Debug.Log("Detected Overlap");
-                Destroy(newRoom.gameObject);
-                openExits.Remove(exitToConnect);
-                continue;
-            }
-
+            // Add room to lists
             spawnedRooms.Add(newRoom);
-            spawnedRoomsCount += 1;
+            exitToConnect.collisionIsEntryWay = true;
+            exitToConnect.CloseExit();
+            spawnedRoomsCount++;
 
-            foreach (RoomExit newExit in newRoom.GetExits())
-            {
-                openExits.Add(newExit);
-            }
+            unusedExits.AddRange(newRoom.GetExits());
+            allEnemySpawnPoints.AddRange(newRoom.GetEnemySpawnPoints());
+            wallBuyLocations.AddRange(newRoom.GetWallBuyLocations());
 
-            openExits.Remove(exitToConnect);
+            // Move exits from unused → used
+            unusedExits.Remove(exitToConnect);
+            exitsUsed.Add(exitToConnect);
         }
     }
+
+    #region Helper Methods
 
     private Room InstantiateRoom(Room prefab, Vector3 position, Quaternion rotation)
     {
@@ -106,10 +130,9 @@ public class RoomSpawner : MonoBehaviour
 
     private RoomExit PickRandomExit()
     {
-        int index = Random.Range(0, openExits.Count);
-        return openExits[index];
+        int index = Random.Range(0, unusedExits.Count);
+        return unusedExits[index];
     }
-
 
     private Room PickCompatibleRoom(RoomExit existingExit)
     {
@@ -127,21 +150,15 @@ public class RoomSpawner : MonoBehaviour
             }
         }
 
-        if (compatibleRooms.Count == 0)
-        {
-            return null;
-        }
-
-        int randomIndex = Random.Range(0, compatibleRooms.Count);
-        return compatibleRooms[randomIndex];
+        if (compatibleRooms.Count == 0) return null;
+        return compatibleRooms[Random.Range(0, compatibleRooms.Count)];
     }
 
     private Room SpawnRoomAtExit(Room prefab, RoomExit exitToConnect)
     {
         Quaternion rotation = Quaternion.LookRotation(exitToConnect.transform.forward, Vector3.up);
         Vector3 spawnPosition = exitToConnect.transform.position;
-        Room newRoom = InstantiateRoom(prefab, spawnPosition, rotation);
-        return newRoom;
+        return InstantiateRoom(prefab, spawnPosition, rotation);
     }
 
     private bool CheckOverlap(Room newRoom)
@@ -154,45 +171,28 @@ public class RoomSpawner : MonoBehaviour
             foreach (var hit in overlaps)
             {
                 Room otherRoom = hit.GetComponentInParent<Room>();
-                if (otherRoom != null && otherRoom != newRoom)
-                {
-                    if (newRoom.generationOrder > otherRoom.generationOrder)
-                        return true;
-                }
+                if (otherRoom != null && otherRoom != newRoom && newRoom.generationOrder > otherRoom.generationOrder)
+                    return true;
             }
         }
 
         return false;
     }
 
-
-    public void ConnectExits(RoomExit existingExit, Room newRoom)
+    private void SpawnRandomWallBuy()
     {
-        if (existingExit == null || newRoom == null)
+        if (possibleWallBuys.Count == 0 || wallBuyLocations.Count == 0)
+        {
+            Debug.LogWarning("No wall buy prefabs or locations assigned!");
             return;
+        }
 
-        // Get the NavMeshLink on the existing exit
-        NavMeshLink link = existingExit.GetComponent<NavMeshLink>();
-        if (link == null)
-            return;
+        WallBuy prefab = possibleWallBuys[Random.Range(0, possibleWallBuys.Count)];
+        Transform location = wallBuyLocations[Random.Range(0, wallBuyLocations.Count)];
 
-        // The “end” of the link is the new room's entrance (0,0)
-        Vector3 entranceWorldPos = newRoom.transform.position;
-
-        // Compute midpoint
-        Vector3 midpoint = (existingExit.transform.position + entranceWorldPos) * 0.5f;
-        link.transform.position = midpoint;
-
-        // Align link along direction
-        Vector3 dir = entranceWorldPos - existingExit.transform.position;
-        link.transform.rotation = Quaternion.LookRotation(dir);
-
-        // Set width using the doorway collider
-        BoxCollider doorCollider = existingExit.GetComponent<BoxCollider>();
-        if (doorCollider != null)
-            link.width = doorCollider.size.x; // Or size.z depending on your axis
-
-        // Enable the link
-        link.enabled = true;
+        WallBuy newWallBuy = Instantiate(prefab, location.position, location.rotation);
+        wallBuyLocations.Remove(location);
     }
+
+    #endregion
 }

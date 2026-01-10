@@ -1,0 +1,367 @@
+using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+using System.Linq;
+
+public class Skeleton : MonoBehaviour
+{
+    [Header("Audio")]
+    public AudioSource audioSource;
+
+    public AudioClip spawnClip;
+    public AudioClip deathClip;
+    public AudioClip[] walkClips;
+
+    [Tooltip("Min time between footstep sounds")]
+    public float walkSoundMinInterval = 0.4f;
+
+    [Tooltip("Max time between footstep sounds")]
+    public float walkSoundMaxInterval = 0.8f;
+
+    float nextWalkSoundTime = 0f;
+
+    public AudioClip attackSlashClip;
+
+    bool hasPlayedAttackSound = false;
+
+    
+    [Header("References")]
+    public Transform player;
+    public Animator anim;
+    public NavMeshAgent agent;
+    public Collider swordHitbox;
+
+    private SkeletonRoundManager roundManager;
+
+    [Header("Settings")]
+    public float walkSpeed = 3.5f;
+    public float speedRandomness = 0.5f;
+    public float attackRange = 2f;
+    public float spawnDuration = 2f;
+    public float deathDuration = 1f;
+
+    [Header("Stats")]
+    public float health = 35;
+    public float damage = 1;
+
+    bool isSpawning = true;
+    bool isDead = false;
+    bool isAttacking = false;
+    bool hasDealtDamageThisAttack = false;
+
+    float attackAnimationLength;
+
+    void Start()
+    {
+        // Ensure player reference
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+                player = playerObj.transform;
+            else
+                Debug.LogError("No GameObject with tag 'Player' found!");
+        }
+
+        // Cache round manager
+        roundManager = FindFirstObjectByType<SkeletonRoundManager>();
+
+        // Cache attack animation length dynamically
+        attackAnimationLength = anim.runtimeAnimatorController.animationClips
+            .First(c => c.name == "root|slash01") // <-- Make sure this is the exact clip name!
+            .length;
+
+        // Spawn animation setup
+        agent.speed = 0f;
+        anim.SetBool("isSpawning", true);
+
+        PlayOneShot(spawnClip, 0.1f);
+
+        Invoke(nameof(FinishSpawn), spawnDuration);
+    }
+
+    void FinishSpawn()
+    {
+        isSpawning = false;
+        anim.SetBool("isSpawning", false);
+
+        float randomOffset = Random.Range(-speedRandomness, speedRandomness);
+        agent.speed = walkSpeed + randomOffset;
+    }
+
+    void PlayOneShot(AudioClip clip, float delay = 0f)
+    {
+        if (clip == null || audioSource == null) return;
+
+        if (delay <= 0f)
+        {
+            PlayNow(clip);
+        }
+        else
+        {
+            StartCoroutine(PlayOneShotDelayed(clip, delay));
+        }
+    }
+
+    void PlayNow(AudioClip clip)
+    {
+        audioSource.pitch = Random.Range(0.95f, 1.05f);
+        audioSource.PlayOneShot(clip);
+        audioSource.pitch = 1f;
+    }
+
+    IEnumerator PlayOneShotDelayed(AudioClip clip, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayNow(clip);
+    }
+
+    void Update()
+    {
+        if (isDead || isSpawning || player == null) return;
+
+        if (isAttacking)
+        {
+            FacePlayer();
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance > attackRange)
+        {
+            MoveTowardPlayer();
+        }
+        else
+        {
+            TryAttack();
+        }
+
+        // 🔊 Walking sound handler
+        HandleWalkingSound();
+    }
+
+    public void UpdateStats(int floor, int round)
+    {
+        float floorMultiplier = 1 + (floor - 1) * 0.2f;    // 20% increase per floor
+        float roundMultiplier = 1 + (round - 1) * 0.1f;    // 10% increase per round
+
+        health *= floorMultiplier * roundMultiplier;
+        walkSpeed *= 1 + 0.05f * (floor + round);
+        damage *= 1 + 0.05f * (floor + round);
+    }
+
+
+    void MoveTowardPlayer()
+    {
+        if (agent == null || player == null) return;
+
+        agent.isStopped = false;
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+
+        // Calculate path to the player's current position
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(player.position, path);
+
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
+            // Player is reachable
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            // Player unreachable → go to the last reachable corner along the path
+            if (path.corners.Length > 0)
+            {
+                Vector3 lastReachable = path.corners[path.corners.Length - 1];
+                agent.SetDestination(lastReachable);
+            }
+            else
+            {
+                // Optional: snap to nearest NavMesh point to avoid agent being stuck
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(player.position, out hit, 5f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(hit.position);
+                }
+            }
+        }
+
+        // Update animation based on agent speed
+        anim.SetFloat("speed", agent.velocity.magnitude);
+    }
+
+    void HandleWalkingSound()
+    {
+        if (walkClips == null || walkClips.Length == 0) return;
+        if (!agent || !agent.enabled) return;
+
+        bool isMoving =
+            agent.velocity.magnitude > 0.2f &&
+            !agent.isStopped &&
+            !isAttacking &&
+            !isSpawning &&
+            !isDead;
+
+        if (!isMoving) return;
+
+        if (Time.time >= nextWalkSoundTime)
+        {
+            AudioClip clip = walkClips[Random.Range(0, walkClips.Length)];
+            audioSource.PlayOneShot(clip, 0.2f);
+
+            nextWalkSoundTime = Time.time + Random.Range(
+                walkSoundMinInterval,
+                walkSoundMaxInterval
+            );
+        }
+    }
+
+    void TryAttack()
+    {
+        // Stop agent movement COMPLETELY
+        agent.isStopped = true;
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+
+        anim.SetFloat("speed", 0f);
+
+        if (!isAttacking)
+        {
+            anim.SetTrigger("attackTrigger");
+            StartCoroutine(AttackRoutine());
+        }
+    }
+
+    public void EnableHitbox() => swordHitbox.enabled = true;
+    public void DisableHitbox() => swordHitbox.enabled = false;
+
+    IEnumerator AttackRoutine()
+    {
+    isAttacking = true;
+    hasDealtDamageThisAttack = false;
+    hasPlayedAttackSound = false;
+
+
+        // --- DAMAGE WINDOW SETTINGS ---
+        float damageStart = 0.4f;   // when damage begins
+        float damageEnd = 0.9f;     // when damage ends
+        // ------------------------------
+
+        // Wait until damage start moment
+        yield return new WaitForSeconds(damageStart);
+
+        if (!hasPlayedAttackSound)
+        {
+            PlayOneShot(attackSlashClip);
+            hasPlayedAttackSound = true;
+        }
+
+        // Enable continuous damage checks
+        float elapsed = 0f;
+        while (elapsed < (damageEnd - damageStart))
+        {
+            DealSwordDamage();
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Wait the rest of the animation AFTER the damage window
+        float remaining = attackAnimationLength - damageEnd;
+        if (remaining > 0)
+            yield return new WaitForSeconds(remaining);
+
+        // Sync agent after attack
+        agent.nextPosition = transform.position;
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+        agent.isStopped = false;
+
+        isAttacking = false;
+    }
+
+
+    public void TakeDamage(float amount)
+    {
+        Debug.Log("TakeDamage() is called");
+        if (isDead) return;
+
+        health -= amount;
+        if (health <= 0)
+        {
+            PlayerMoneyManager.Instance.AddMoney(100);
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        isDead = true;
+
+        StopAllCoroutines(); // prevent lingering coroutines from touching agent
+
+        PlayOneShot(deathClip, 0.25f);
+
+        // Stop movement
+        if(agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+            agent.enabled = false; // disable AFTER stopping
+        }
+
+        // Play death animation
+        anim.SetBool("isDead", true);
+
+        // Disable collisions
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        // Notify round manager
+        if (roundManager != null)
+            roundManager.OnSkeletonKilled();
+
+        Destroy(gameObject, deathDuration);
+    }
+
+    public void DealSwordDamage()
+    {
+        if (!isAttacking) return; // ensure mid-attack
+        if (hasDealtDamageThisAttack) return;
+
+        float hitRadius = 0.8f;     // tune based on sword size
+        float hitDistance = 2f;     // reach of the attack
+
+        Vector3 origin = transform.position + Vector3.up * 1.0f; // chest height
+        Vector3 direction = transform.forward;
+
+        int mask = LayerMask.GetMask("Player"); // only hit player
+
+        if (Physics.SphereCast(origin, hitRadius, direction, out RaycastHit hit, hitDistance, mask))
+        {
+            PlayerHealth health = hit.collider.GetComponentInParent<PlayerHealth>();
+            if (health != null)
+            {
+                health.TakeDamage(damage);
+                hasDealtDamageThisAttack = true;
+            }
+        }
+    }
+
+    void FacePlayer()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0; // keep only horizontal rotation
+
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * 8f // rotation speed
+            );
+        }
+    }
+}

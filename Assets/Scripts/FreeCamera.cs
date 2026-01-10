@@ -35,27 +35,25 @@ public class FreeCamera : MonoBehaviour
         rotationY += mouseX;
 
         rotationX = Mathf.Clamp(rotationX, -90f, 90f);
-
         transform.localRotation = Quaternion.Euler(rotationX, rotationY, 0f);
     }
 
     void HandleMovement()
     {
-        // Basic WASD movement
-        Vector3 move = new Vector3(
-            Input.GetAxis("Horizontal"),
-            0f,
-            Input.GetAxis("Vertical")
-        );
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        bool sprint = Input.GetKey(KeyCode.LeftShift);
+        bool up = Input.GetKey(KeyCode.E);
+        bool down = Input.GetKey(KeyCode.Q);
 
-        // Vertical movement with Q/E
-        if (Input.GetKey(KeyCode.E)) move.y += 1f;
-        if (Input.GetKey(KeyCode.Q)) move.y -= 1f;
+        Vector3 direction = new Vector3(horizontal, 0f, vertical);
+        direction.y = (up ? 1f : 0f) + (down ? -1f : 0f);
 
-        // Apply speed and sprint
-        float speed = moveSpeed;
-        if (Input.GetKey(KeyCode.LeftShift)) speed *= sprintMultiplier;
+        if (direction.magnitude > 1f)
+            direction.Normalize();
 
-        transform.Translate(move * speed * Time.deltaTime, Space.Self);
+        float speed = sprint ? moveSpeed * sprintMultiplier : moveSpeed;
+
+        transform.Translate(direction * speed * Time.deltaTime, Space.Self);
     }
 }
